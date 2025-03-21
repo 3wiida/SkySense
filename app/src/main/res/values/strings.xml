@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">SkySense</string>
+    <string name="location_permission_primary_text">Get Weather Updates for Your Exact Location</string>
+    <string name="location_permission_secondary_text">Allow location access for precise weather updates. This is required for the best experience.</string>
+    <string name="notification_permission_primary_text">Stay Notified About the Weather</string>
+    <string name="notification_permission_secondary_text">Get real-time weather alerts, forecasts, and important updates for your location. You can manage your preferences anytime in settings.</string>
+    <string name="allow_permission">Allow Permission</string>
+    <string name="maybe_later">Maybe Later</string>
+    <string name="location_rational_title">Location Access Needed</string>
+    <string name="location_rational_content">To provide accurate weather updates for your area, location access is essential. Please enable it in your device settings to continue.</string>
+    <string name="allow">Allow</string>
+    <string name="cancel">Cancel</string>
+    <string name="location_settings_title">Enable Location in Settings</string>
+    <string name="location_settings_content">Location access is necessary for accurate weather updates, but it has been disabled. Please go to your device settings and enable location permission for this app.</string>
+    <string name="settings">Settings</string>
 </resources>

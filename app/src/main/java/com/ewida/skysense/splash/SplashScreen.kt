@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,9 +17,13 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.ewida.skysense.R
+import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen() {
+fun SplashScreen(
+    onNavigateToPermissions: () -> Unit,
+    onNavigateToWeatherDetails: () -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -31,7 +36,7 @@ fun SplashScreen() {
                 )
             ),
         contentAlignment = Alignment.Center
-    ){
+    ) {
         val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.splash_anim))
         LottieAnimation(
             modifier = Modifier.size(250.dp),
@@ -39,5 +44,10 @@ fun SplashScreen() {
             iterations = LottieConstants.IterateForever,
             applyShadowToLayers = true
         )
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        delay(2000)
+        onNavigateToPermissions()
     }
 }

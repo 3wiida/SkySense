@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    kotlin("plugin.serialization") version "2.1.10"
 }
 
 android {
@@ -59,4 +60,10 @@ dependencies {
 
     //Lottie
     implementation (libs.lottie.compose)
+
+    //Navigation
+    implementation(libs.androidx.navigation.compose)
+
+    //Kotlin Serialization
+    implementation(libs.kotlinx.serialization.json)
 }
