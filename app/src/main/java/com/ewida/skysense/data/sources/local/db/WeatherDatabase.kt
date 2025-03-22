@@ -1,10 +1,15 @@
-package com.ewida.skysense.data.sources.local
+package com.ewida.skysense.data.sources.local.db
 
 import android.content.Context
+import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.ewida.skysense.data.model.WeatherDetails
+import com.ewida.skysense.data.sources.local.db.typeconverters.WeatherConverters
 
-
+@Database(entities = [WeatherDetails::class], version = 1)
+@TypeConverters(WeatherConverters::class)
 abstract class WeatherDatabase : RoomDatabase() {
     abstract fun getDao(): WeatherDao
 

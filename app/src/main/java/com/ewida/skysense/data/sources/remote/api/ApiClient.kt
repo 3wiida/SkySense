@@ -1,4 +1,4 @@
-package com.ewida.skysense.data.sources.remote
+package com.ewida.skysense.data.sources.remote.api
 
 import android.util.Log
 import okhttp3.OkHttpClient
@@ -7,12 +7,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiClient {
-    private const val BASE_URL = "https://api.openweathermap.org/data/2.5"
+    private const val BASE_URL = "https://api.openweathermap.org/data/3.0/"
     private const val NETWORK_LOG_TAG = "NetworkResponse"
     private const val API_KEY_QUERY_KEY = "appid"
-    private const val API_KEY_QUERY_VALUE = "2fec6deee3ff318e2cd9561812106598"
+    private const val API_KEY_QUERY_VALUE = "02f7303416defaa054fd9589e2bd7ce2"
 
-    fun getApiServices() = Retrofit.Builder().apply {
+    fun getApiServices(): ApiServices = Retrofit.Builder().apply {
         baseUrl(BASE_URL)
         client(getHttpClient())
         addConverterFactory(GsonConverterFactory.create())

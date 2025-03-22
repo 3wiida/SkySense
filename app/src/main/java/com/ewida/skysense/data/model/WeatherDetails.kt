@@ -1,11 +1,17 @@
 package com.ewida.skysense.data.model
 
+import androidx.room.Entity
+import androidx.room.TypeConverters
+import com.ewida.skysense.data.sources.local.db.typeconverters.WeatherConverters
+
+@Entity(tableName = "WEATHER_DETAILS", primaryKeys = ["lat","lon"])
+@TypeConverters(WeatherConverters::class)
 data class WeatherDetails(
-    val id: Int,
-    val main: Main,
-    val name: String,
-    val sys: Sys,
-    val timezone: Int,
-    val weather: List<Weather>,
-    val wind: Wind
+    val lat: Double,
+    val lon: Double,
+    val timezone: String,
+    val timezone_offset: Int,
+    val current: Current,
+    val hourly: List<Hourly>,
+    val daily: List<Daily>
 )
