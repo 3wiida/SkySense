@@ -13,4 +13,5 @@
     <string name="location_settings_title">Enable Location in Settings</string>
     <string name="location_settings_content">Location access is necessary for accurate weather updates, but it has been disabled. Please go to your device settings and enable location permission for this app.</string>
     <string name="settings">Settings</string>
+    <string name="_24_hours_forecast">24 Hours Forecast</string>
 </resources>

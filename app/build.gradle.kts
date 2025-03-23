@@ -78,4 +78,10 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
+
+    //Charts
+    implementation ("io.github.ehsannarmani:compose-charts:0.1.2")
+
+    //Glide
+    implementation (libs.compose)
 }

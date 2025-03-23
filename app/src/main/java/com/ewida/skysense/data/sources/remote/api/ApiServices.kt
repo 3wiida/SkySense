@@ -10,5 +10,6 @@ interface ApiServices {
         @Query("lat") latitude: Double,
         @Query("lon") longitude: Double,
         @Query("exclude") exclude: String = "minutely,alerts",
+        @Query("units") unites: String = "metric"
     ): WeatherDetails
 }
