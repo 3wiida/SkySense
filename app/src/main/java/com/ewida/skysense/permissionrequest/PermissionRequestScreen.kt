@@ -78,7 +78,7 @@ fun PermissionRequestScreen(
         onAllowClicked = {
             isShowRationalDialog = false
             isShowSettingsDialog = false
-            launcher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+            launcher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
         }
     )
 
@@ -87,7 +87,7 @@ fun PermissionRequestScreen(
     ) {
         RationalDialog(
             onAllowPermissionClicked = {
-                launcher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                launcher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
             },
             onDismiss = {
                 isShowRationalDialog = false
@@ -239,7 +239,7 @@ private fun onPermissionResult(
     if (isPermissionGranted) {
         onGranted()
     } else {
-        if (activity?.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) == true) {
+        if (activity?.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION) == true) {
             onShowRational()
         } else {
 
@@ -260,7 +260,7 @@ private fun openAppSettings(activity: Activity?) {
 
 private fun isHasLocationPermission(activity: Activity?): Boolean {
     return activity?.let {
-        it.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        it.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
     } ?: false
 
 }

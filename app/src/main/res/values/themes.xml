@@ -3,4 +3,9 @@
 
     <style name="Theme.SkySense" parent="android:Theme.Material.Light.NoActionBar" />
 
+    <style name="Theme.SkySenseSplash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#8BAADF</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_ic</item>
+        <item name="postSplashScreenTheme">@style/Theme.SkySense</item>
+    </style>
 </resources>

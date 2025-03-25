@@ -11,6 +11,7 @@ import com.ewida.skysense.util.network.getError
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -20,6 +21,8 @@ class WeatherDetailsViewModel(private val repo: WeatherRepository) : ViewModel()
     private val _detailsResponse = MutableStateFlow<NetworkResponse<WeatherDetails>>(NetworkResponse.Loading)
     val detailsResponse = _detailsResponse.asStateFlow()
 
+    private val _cachedData = MutableStateFlow<WeatherDetails?>(null)
+    val cachedData = _cachedData.asStateFlow()
 
     fun getWeatherDetails(latitude: Double, longitude: Double) {
         viewModelScope.launch {
@@ -29,9 +32,8 @@ class WeatherDetailsViewModel(private val repo: WeatherRepository) : ViewModel()
             ).catch { throwable ->
                 emitError(throwable = throwable)
             }.collect { details ->
-                _detailsResponse.emit(
-                    NetworkResponse.Success(details)
-                )
+                _detailsResponse.update { NetworkResponse.Success(details) }
+                _cachedData.update { details }
             }
         }
     }
@@ -55,6 +57,7 @@ class WeatherDetailsViewModel(private val repo: WeatherRepository) : ViewModel()
             )
         )
     }
+
 
     @Suppress("UNCHECKED_CAST")
     class WeatherDetailsViewModelFactory(private val repo: WeatherRepository) :

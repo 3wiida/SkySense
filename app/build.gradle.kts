@@ -59,6 +59,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    //Splash
+    implementation(libs.androidx.core.splashscreen)
+
     //Lottie
     implementation (libs.lottie.compose)
 
@@ -78,9 +81,6 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
-
-    //Charts
-    implementation ("io.github.ehsannarmani:compose-charts:0.1.2")
 
     //Glide
     implementation (libs.compose)
