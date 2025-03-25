@@ -84,4 +84,7 @@ dependencies {
 
     //Glide
     implementation (libs.compose)
+
+    //Location
+    implementation (libs.play.services.location)
 }

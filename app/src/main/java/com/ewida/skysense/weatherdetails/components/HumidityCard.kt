@@ -1,5 +1,7 @@
 package com.ewida.skysense.weatherdetails.components
 
+import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -30,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 fun HumidityCard(
     humidityPercent: Int = 75
 ) {
+
     Box(
         modifier = Modifier
             .height(175.dp)

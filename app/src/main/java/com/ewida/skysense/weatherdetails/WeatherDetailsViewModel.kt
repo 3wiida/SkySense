@@ -26,6 +26,7 @@ class WeatherDetailsViewModel(private val repo: WeatherRepository) : ViewModel()
 
     fun getWeatherDetails(latitude: Double, longitude: Double) {
         viewModelScope.launch {
+            _detailsResponse.emit(NetworkResponse.Loading)
             repo.getWeatherDetails(
                 latitude = latitude,
                 longitude = longitude

@@ -13,10 +13,8 @@ import com.ewida.skysense.data.sources.local.db.WeatherDatabase
 import com.ewida.skysense.data.sources.remote.RemoteDataSourceImpl
 import com.ewida.skysense.data.sources.remote.api.ApiClient
 import com.ewida.skysense.permissionrequest.PermissionRequestScreen
-import com.ewida.skysense.splash.SplashScreen
 import com.ewida.skysense.weatherdetails.WeatherDetailsScreen
 import com.ewida.skysense.weatherdetails.WeatherDetailsViewModel
-import kotlin.reflect.KClass
 
 @Composable
 fun AppNavHost(
