@@ -1,5 +1,6 @@
 package com.ewida.skysense.weatherdetails
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -21,21 +22,15 @@ class WeatherDetailsViewModel(private val repo: WeatherRepository) : ViewModel()
     private val _detailsResponse = MutableStateFlow<NetworkResponse<WeatherDetails>>(NetworkResponse.Loading)
     val detailsResponse = _detailsResponse.asStateFlow()
 
-    private val _cachedData = MutableStateFlow<WeatherDetails?>(null)
-    val cachedData = _cachedData.asStateFlow()
-
     fun getWeatherDetails(latitude: Double, longitude: Double) {
         viewModelScope.launch {
-            _detailsResponse.emit(NetworkResponse.Loading)
-            repo.getWeatherDetails(
-                latitude = latitude,
-                longitude = longitude
-            ).catch { throwable ->
-                emitError(throwable = throwable)
-            }.collect { details ->
-                _detailsResponse.update { NetworkResponse.Success(details) }
-                _cachedData.update { details }
-            }
+            repo.getWeatherDetails(latitude, longitude)
+                .catch { throwable ->
+                    emitError(throwable)
+                }
+                .collect { details ->
+                    _detailsResponse.value = NetworkResponse.Success(details)
+                }
         }
     }
 
@@ -43,17 +38,9 @@ class WeatherDetailsViewModel(private val repo: WeatherRepository) : ViewModel()
         _detailsResponse.emit(
             NetworkResponse.Failure(
                 error = when (throwable) {
-                    is HttpException -> {
-                        throwable.getError()
-                    }
-
-                    is IOException -> {
-                        ErrorModel(message = "No Internet Connection Available")
-                    }
-
-                    else -> {
-                        ErrorModel(message = throwable.message.toString())
-                    }
+                    is HttpException -> throwable.getError()
+                    is IOException -> ErrorModel(message = "No Internet Connection Available")
+                    else -> ErrorModel(message = throwable.message ?: "Unknown error")
                 }
             )
         )

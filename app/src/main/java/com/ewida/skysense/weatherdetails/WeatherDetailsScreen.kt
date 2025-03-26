@@ -45,10 +45,10 @@ import com.ewida.skysense.weatherdetails.components.WeatherInsightsSection
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun WeatherDetailsScreen(
-    viewModel: WeatherDetailsViewModel
+    viewModel: WeatherDetailsViewModel,
+    onNavigateToSavedPlaces: () -> Unit
 ) {
     val detailsResponse = viewModel.detailsResponse.collectAsStateWithLifecycle()
-    val cachedData = viewModel.cachedData.collectAsStateWithLifecycle()
 
     var isDaysForecastBottomSheetShown by remember { mutableStateOf(false) }
     var currentLocation by remember { mutableStateOf<Location?>(null) }
@@ -60,7 +60,7 @@ fun WeatherDetailsScreen(
     Scaffold(
         topBar = {
             AppTopBar(
-                onSavedPlacesClicked = {},
+                onSavedPlacesClicked = onNavigateToSavedPlaces,
                 onAlertsClicked = {},
                 onSettingsClicked = {}
             )
@@ -69,7 +69,6 @@ fun WeatherDetailsScreen(
 
         WeatherDetailsScreenContent(
             detailsResponse = detailsResponse.value,
-            cachedData = cachedData.value,
             addressLine = addressLine,
             onShowDaysForecast = {
                 isDaysForecastBottomSheetShown = !isDaysForecastBottomSheetShown
@@ -83,20 +82,19 @@ fun WeatherDetailsScreen(
                 }
             }
         )
-
     }
 
 
-    cachedData.value?.let {
-        if (isDaysForecastBottomSheetShown) {
-            DailyForecastBottomSheet(
-                forecast = it.daily,
-                onDismiss = {
-                    isDaysForecastBottomSheetShown = !isDaysForecastBottomSheetShown
-                }
-            )
-        }
+
+    if (isDaysForecastBottomSheetShown) {
+        DailyForecastBottomSheet(
+            forecast = (detailsResponse.value as NetworkResponse.Success).data.daily,
+            onDismiss = {
+                isDaysForecastBottomSheetShown = !isDaysForecastBottomSheetShown
+            }
+        )
     }
+
 
     DisposableEffect(key1 = owner) {
         val observer = LifecycleEventObserver { _, event ->
@@ -104,8 +102,6 @@ fun WeatherDetailsScreen(
                 LocationUtils.getCurrentLocation(
                     context = context,
                     onLocationAvailable = { location ->
-                        Log.d("```TAG```", "lat: ${location.latitude.roundTo(2)}")
-                        Log.d("```TAG```", "lon: ${location.longitude.roundTo(2)}")
                         viewModel.getWeatherDetails(
                             latitude = location.latitude.roundTo(2),
                             longitude = location.longitude.roundTo(2)
@@ -132,33 +128,26 @@ fun WeatherDetailsScreen(
 private fun WeatherDetailsScreenContent(
     modifier: Modifier = Modifier,
     detailsResponse: NetworkResponse<WeatherDetails>,
-    cachedData: WeatherDetails?,
     addressLine: String,
     onShowDaysForecast: () -> Unit,
     onFailureRetryClicked: () -> Unit
 ) {
     when (detailsResponse) {
         is NetworkResponse.Loading -> {
+            Log.d("```TAG```", "WeatherDetailsScreenContent: loading")
             WeatherDetailsLoadingState()
         }
 
         is NetworkResponse.Failure -> {
-            if (cachedData == null) {
-                WeatherDetailsFailureState(
-                    cause = detailsResponse.error.message,
-                    onRetryClicked = onFailureRetryClicked
-                )
-            } else {
-                WeatherDetailsUI(
-                    modifier = modifier,
-                    details = cachedData,
-                    addressLine = addressLine,
-                    onShowDaysForecast = onShowDaysForecast
-                )
-            }
+            Log.d("```TAG```", "WeatherDetailsScreenContent: failed")
+            WeatherDetailsFailureState(
+                cause = detailsResponse.error.message,
+                onRetryClicked = onFailureRetryClicked
+            )
         }
 
         is NetworkResponse.Success<*> -> {
+            Log.d("```TAG```", "WeatherDetailsScreenContent: success")
             detailsResponse.data?.let {
                 WeatherDetailsUI(
                     modifier = modifier,

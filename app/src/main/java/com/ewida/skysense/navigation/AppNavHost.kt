@@ -13,8 +13,12 @@ import com.ewida.skysense.data.sources.local.db.WeatherDatabase
 import com.ewida.skysense.data.sources.remote.RemoteDataSourceImpl
 import com.ewida.skysense.data.sources.remote.api.ApiClient
 import com.ewida.skysense.permissionrequest.PermissionRequestScreen
+import com.ewida.skysense.placepicker.PlacePickerScreen
+import com.ewida.skysense.placepicker.PlacePickerViewModel
+import com.ewida.skysense.saved.SavedPlacesScreen
 import com.ewida.skysense.weatherdetails.WeatherDetailsScreen
 import com.ewida.skysense.weatherdetails.WeatherDetailsViewModel
+import com.google.android.libraries.places.api.Places
 
 @Composable
 fun AppNavHost(
@@ -47,7 +51,30 @@ fun AppNavHost(
             WeatherDetailsScreen(
                 viewModel = viewModel(
                     factory = WeatherDetailsViewModel.WeatherDetailsViewModelFactory(repo = repository)
-                )
+                ),
+                onNavigateToSavedPlaces = {
+                    navHostController.navigate(Screens.SavedPlaces)
+                }
+            )
+        }
+
+        composable<Screens.SavedPlaces> {
+            SavedPlacesScreen(
+                onNavigateToPlacePicker = {
+                    navHostController.navigate(Screens.PlacePicker)
+                }
+            )
+        }
+
+        composable<Screens.PlacePicker> {
+            PlacePickerScreen(
+                viewModel = viewModel(
+                    factory = PlacePickerViewModel.PlacePickerViewModelFactory(
+                        repository = repository,
+                        placesClient = Places.createClient(context)
+                    )
+                ),
+                onNavigateUp = { navHostController.navigateUp() }
             )
         }
     }

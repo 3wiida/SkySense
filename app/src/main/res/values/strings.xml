@@ -30,4 +30,9 @@
     <string name="weather_insights">Weather Insights</string>
     <string name="failure_main_text">oops! an error occured</string>
     <string name="retry">Retry</string>
+    <string name="save">Save</string>
+    <string name="search">Search</string>
+    <string name="search_for_a_city">Search for a city...</string>
+    <string name="save_place_success">Place Saved Successfully</string>
+    <string name="save_place_error">oops! can\'t save this place</string>
 </resources>

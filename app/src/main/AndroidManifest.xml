@@ -14,8 +14,15 @@
         android:usesCleartextTraffic="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:name="com.ewida.SkySenseApplication"
         android:theme="@style/Theme.SkySense"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyA5rMOFNsoUcLMTq3YiLny0A0mG48lmO3c" />
+
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

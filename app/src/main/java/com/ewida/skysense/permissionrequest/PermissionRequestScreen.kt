@@ -33,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -45,6 +46,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.ewida.skysense.R
 import com.ewida.skysense.permissionrequest.dialogs.PermissionDialog
 import com.ewida.skysense.ui.theme.SkySenseTheme
+import com.ewida.skysense.util.hasLocationPermission
 
 
 @Composable
@@ -52,7 +54,9 @@ fun PermissionRequestScreen(
     onNavigateToWeatherDetails: () -> Unit
 ) {
     val activity = LocalActivity.current
+    val context = LocalContext.current
     val owner = LocalLifecycleOwner.current
+
     var isShowRationalDialog by remember { mutableStateOf(false) }
     var isShowSettingsDialog by remember { mutableStateOf(false) }
 
@@ -113,7 +117,7 @@ fun PermissionRequestScreen(
 
     DisposableEffect(key1 = owner) {
         val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_START &&  isHasLocationPermission(activity)) {
+            if (event == Lifecycle.Event.ON_START && context.hasLocationPermission()) {
                 onNavigateToWeatherDetails()
             }
         }
@@ -256,11 +260,4 @@ private fun openAppSettings(activity: Activity?) {
         }
         it.startActivity(intent)
     }
-}
-
-private fun isHasLocationPermission(activity: Activity?): Boolean {
-    return activity?.let {
-        it.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-    } ?: false
-
 }

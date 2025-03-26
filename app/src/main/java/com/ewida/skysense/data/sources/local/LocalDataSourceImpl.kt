@@ -8,7 +8,7 @@ class LocalDataSourceImpl(private val dao: WeatherDao) : LocalDataSource {
         dao.saveWeatherDetails(weatherDetails = details)
     }
 
-    override suspend fun getWeatherDetails(latitude: Double, longitude: Double): WeatherDetails {
+    override suspend fun getWeatherDetails(latitude: Double, longitude: Double): WeatherDetails? {
         return dao.getLocalWeatherDetails(
             latitude = latitude,
             longitude = longitude

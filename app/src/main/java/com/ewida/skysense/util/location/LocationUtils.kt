@@ -7,6 +7,9 @@ import android.location.Geocoder
 import android.location.Location
 import android.os.Build
 import android.os.Looper
+import android.util.Log
+import androidx.compose.runtime.Composable
+import com.ewida.skysense.util.roundTo
 import com.google.android.gms.location.LocationListener
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
@@ -23,6 +26,8 @@ object LocationUtils {
 
         val callbacks = object : LocationListener {
             override fun onLocationChanged(location: Location) {
+                Log.d("```TAG```", "lat: ${location.latitude.roundTo(2)}")
+                Log.d("```TAG```", "lon: ${location.longitude.roundTo(2)}")
                 onLocationAvailable(location)
                 fusedLocationClient.removeLocationUpdates(this)
             }
@@ -66,4 +71,22 @@ object LocationUtils {
             }
         }
     }
+
+    fun getLocationAddressLine(
+        context: Context,
+        latitude: Double,
+        longitude: Double,
+    ): String {
+        val addresses = Geocoder(context).getFromLocation(
+            latitude,
+            longitude,
+            1
+        )
+        return if (addresses != null && addresses.isNotEmpty()) {
+            "${addresses.first().adminArea}, ${addresses.first().subAdminArea}"
+        } else {
+            "Unknown Location"
+        }
+    }
+
 }

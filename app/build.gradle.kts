@@ -87,4 +87,10 @@ dependencies {
 
     //Location
     implementation (libs.play.services.location)
+
+    //Google Maps
+    implementation (libs.maps.compose)
+
+    //Places API
+    implementation (libs.places.v330)
 }

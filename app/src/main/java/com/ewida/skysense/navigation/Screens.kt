@@ -8,4 +8,10 @@ sealed class Screens {
 
     @Serializable
     data object WeatherDetails : Screens()
+
+    @Serializable
+    data object SavedPlaces : Screens()
+
+    @Serializable
+    data object PlacePicker : Screens()
 }

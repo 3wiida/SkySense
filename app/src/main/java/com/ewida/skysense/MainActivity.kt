@@ -15,6 +15,7 @@ import com.ewida.skysense.data.sources.remote.api.ApiClient
 import com.ewida.skysense.navigation.AppNavHost
 import com.ewida.skysense.navigation.Screens
 import com.ewida.skysense.ui.theme.SkySenseTheme
+import com.ewida.skysense.util.hasLocationPermission
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -30,8 +31,10 @@ class MainActivity : ComponentActivity() {
             isKeepSplashScreen.value
         }
 
-        val startDestination =
-            if (isHasLocationPermission()) Screens.WeatherDetails else Screens.Permissions
+        val startDestination = if (hasLocationPermission())
+            Screens.WeatherDetails
+        else
+            Screens.Permissions
 
         setContent {
             SkySenseTheme {
@@ -45,10 +48,6 @@ class MainActivity : ComponentActivity() {
             delay(2000)
             isKeepSplashScreen.value = false
         }
-    }
-
-    private fun isHasLocationPermission(): Boolean {
-        return checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
     }
 }
 
