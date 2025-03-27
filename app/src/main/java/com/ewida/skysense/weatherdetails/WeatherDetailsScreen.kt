@@ -17,6 +17,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,7 +48,9 @@ import com.ewida.skysense.weatherdetails.components.WeatherInsightsSection
 @Composable
 fun WeatherDetailsScreen(
     viewModel: WeatherDetailsViewModel,
-    onNavigateToSavedPlaces: () -> Unit
+    locationLat: Double?,
+    locationLong: Double?,
+    onNavigateToSavedPlaces: (Double?, Double?) -> Unit
 ) {
     val detailsResponse = viewModel.detailsResponse.collectAsStateWithLifecycle()
 
@@ -60,13 +64,17 @@ fun WeatherDetailsScreen(
     Scaffold(
         topBar = {
             AppTopBar(
-                onSavedPlacesClicked = onNavigateToSavedPlaces,
+                onSavedPlacesClicked = {
+                    onNavigateToSavedPlaces(
+                        currentLocation?.latitude?.roundTo(2),
+                        currentLocation?.longitude?.roundTo(2)
+                    )
+                },
                 onAlertsClicked = {},
                 onSettingsClicked = {}
             )
         }
     ) {
-
         WeatherDetailsScreenContent(
             detailsResponse = detailsResponse.value,
             addressLine = addressLine,
@@ -95,31 +103,36 @@ fun WeatherDetailsScreen(
         )
     }
 
+    LaunchedEffect(Unit) {
+        locationLat?.let {
+            viewModel.getWeatherDetails(
+                latitude = locationLat.roundTo(2),
+                longitude = locationLong!!.roundTo(2)
+            )
+            addressLine = LocationUtils.getLocationAddressLine(
+                context,
+                locationLat,
+                locationLong
+            )?.subAdminArea ?: context.getString(R.string.unknown_location)
+        }
 
-    DisposableEffect(key1 = owner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) {
-                LocationUtils.getCurrentLocation(
-                    context = context,
-                    onLocationAvailable = { location ->
-                        viewModel.getWeatherDetails(
-                            latitude = location.latitude.roundTo(2),
-                            longitude = location.longitude.roundTo(2)
-                        )
-                        LocationUtils.getLocationAddressLine(
-                            context = context,
-                            location = location,
-                            onAddressAvailable = { addressLine = it }
-                        )
-                        currentLocation = location
-                    }
-                )
+        LocationUtils.getCurrentLocation(
+            context = context,
+            onLocationAvailable = { location ->
+                if (locationLat == null) {
+                    viewModel.getWeatherDetails(
+                        latitude = location.latitude.roundTo(2),
+                        longitude = location.longitude.roundTo(2)
+                    )
+                    addressLine = LocationUtils.getLocationAddressLine(
+                        context,
+                        location.latitude,
+                        location.longitude
+                    )?.subAdminArea ?: context.getString(R.string.unknown_location)
+                }
+                currentLocation = location
             }
-        }
-        owner.lifecycle.addObserver(observer)
-        onDispose {
-            owner.lifecycle.removeObserver(observer)
-        }
+        )
     }
 
 }
@@ -134,12 +147,10 @@ private fun WeatherDetailsScreenContent(
 ) {
     when (detailsResponse) {
         is NetworkResponse.Loading -> {
-            Log.d("```TAG```", "WeatherDetailsScreenContent: loading")
             WeatherDetailsLoadingState()
         }
 
         is NetworkResponse.Failure -> {
-            Log.d("```TAG```", "WeatherDetailsScreenContent: failed")
             WeatherDetailsFailureState(
                 cause = detailsResponse.error.message,
                 onRetryClicked = onFailureRetryClicked
@@ -147,7 +158,6 @@ private fun WeatherDetailsScreenContent(
         }
 
         is NetworkResponse.Success<*> -> {
-            Log.d("```TAG```", "WeatherDetailsScreenContent: success")
             detailsResponse.data?.let {
                 WeatherDetailsUI(
                     modifier = modifier,

@@ -1,5 +1,6 @@
 package com.ewida.skysense.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -7,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.ewida.skysense.data.repository.WeatherRepositoryImpl
 import com.ewida.skysense.data.sources.local.LocalDataSourceImpl
 import com.ewida.skysense.data.sources.local.db.WeatherDatabase
@@ -16,8 +18,10 @@ import com.ewida.skysense.permissionrequest.PermissionRequestScreen
 import com.ewida.skysense.placepicker.PlacePickerScreen
 import com.ewida.skysense.placepicker.PlacePickerViewModel
 import com.ewida.skysense.saved.SavedPlacesScreen
+import com.ewida.skysense.saved.SavedPlacesViewModel
 import com.ewida.skysense.weatherdetails.WeatherDetailsScreen
 import com.ewida.skysense.weatherdetails.WeatherDetailsViewModel
+import com.ewida.skysense.weatherdetails.WeatherDetailsViewModel.WeatherDetailsViewModelFactory
 import com.google.android.libraries.places.api.Places
 
 @Composable
@@ -47,27 +51,66 @@ fun AppNavHost(
             )
         }
 
-        composable<Screens.WeatherDetails> {
+        composable<Screens.WeatherDetails> { navBackStackEntry ->
+            val data = navBackStackEntry.toRoute<Screens.WeatherDetails>()
             WeatherDetailsScreen(
                 viewModel = viewModel(
-                    factory = WeatherDetailsViewModel.WeatherDetailsViewModelFactory(repo = repository)
+                    factory = WeatherDetailsViewModelFactory(repo = repository)
                 ),
-                onNavigateToSavedPlaces = {
-                    navHostController.navigate(Screens.SavedPlaces)
+                locationLat = data.placeLat,
+                locationLong = data.placeLong,
+                onNavigateToSavedPlaces = { lat, long ->
+                    navHostController.navigate(
+                        Screens.SavedPlaces(
+                            currentLocationLat = lat ?: 0.0,
+                            currentLocationLong = long ?: 0.0
+                        )
+                    )
                 }
             )
         }
 
-        composable<Screens.SavedPlaces> {
+        composable<Screens.SavedPlaces> { navBackStackEntry ->
+            val data = navBackStackEntry.toRoute<Screens.SavedPlaces>()
             SavedPlacesScreen(
+                userLocationLatitude = data.currentLocationLat,
+                userLocationLongitude = data.currentLocationLong,
+                viewModel = viewModel(
+                    factory = SavedPlacesViewModel.SavedPlacesViewModelFactory(
+                        repository = repository
+                    )
+                ),
                 onNavigateToPlacePicker = {
-                    navHostController.navigate(Screens.PlacePicker)
+                    navHostController.navigate(
+                        Screens.PlacePicker(
+                            initialLat = data.currentLocationLat,
+                            initialLong = data.currentLocationLong
+                        )
+                    )
+                },
+                onNavigateToPlaceDetails = { placeLat, placeLong ->
+                    navHostController.navigate(
+                        Screens.WeatherDetails(
+                            placeLat = placeLat,
+                            placeLong = placeLong
+                        )
+                    ) {
+                        popUpTo<Screens.WeatherDetails> {
+                            inclusive = true
+                        }
+                    }
+                },
+                onNavigateUp = {
+                    navHostController.navigateUp()
                 }
             )
         }
 
-        composable<Screens.PlacePicker> {
+        composable<Screens.PlacePicker> { navBackStackEntry ->
+            val data = navBackStackEntry.toRoute<Screens.PlacePicker>()
             PlacePickerScreen(
+                initialLat = data.initialLat,
+                initialLong = data.initialLong,
                 viewModel = viewModel(
                     factory = PlacePickerViewModel.PlacePickerViewModelFactory(
                         repository = repository,

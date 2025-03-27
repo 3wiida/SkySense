@@ -17,6 +17,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,7 +27,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ewida.skysense.R
+import com.ewida.skysense.placepicker.components.PickingMap
 import com.ewida.skysense.placepicker.components.PlacesSearchBar
+import com.ewida.skysense.placepicker.components.SaveButton
 import com.ewida.skysense.util.ActionResult
 import com.ewida.skysense.util.location.LocationUtils
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -40,15 +43,29 @@ import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.MarkerInfoWindowContent
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
+import kotlinx.coroutines.launch
 
 @Composable
 fun PlacePickerScreen(
     viewModel: PlacePickerViewModel,
+    initialLat: Double,
+    initialLong: Double,
     onNavigateUp: () -> Unit
 ) {
     val context = LocalContext.current
-    var markerState = remember { MarkerState() }
-    val cameraPositionState = rememberCameraPositionState()
+    val scope = rememberCoroutineScope()
+
+    var markerState = remember { MarkerState(position = LatLng(initialLat, initialLong)) }
+    val cameraPositionState = rememberCameraPositionState {
+        scope.launch {
+            animate(
+                CameraUpdateFactory.newLatLngZoom(
+                    LatLng(initialLat, initialLong),
+                    10f
+                )
+            )
+        }
+    }
 
     val predictions = viewModel.searchResults.collectAsStateWithLifecycle()
     val selectedPredictionLatLng = viewModel.predictedPlaceLatLng.collectAsStateWithLifecycle()
@@ -61,13 +78,13 @@ fun PlacePickerScreen(
         predictions = predictions.value,
         onSearchQueryChanged = viewModel::onSearchQueryChanged,
         onPredictionSelected = viewModel::onPredictionSelected,
-        onSaveClicked = viewModel::onSaveClicked
+        onSaveClicked = { viewModel.onSaveClicked(place = markerState.position) }
     )
 
     LaunchedEffect(key1 = selectedPredictionLatLng.value) {
         selectedPredictionLatLng.value?.let {
             markerState.position = it
-            cameraPositionState.animate(CameraUpdateFactory.newLatLngZoom(it, 12f))
+            cameraPositionState.animate(CameraUpdateFactory.newLatLngZoom(it, 10f))
         }
     }
 
@@ -95,41 +112,16 @@ private fun PlacePickerScreenContent(
     predictions: List<AutocompletePrediction>,
     onSearchQueryChanged: (String) -> Unit,
     onPredictionSelected: (String) -> Unit,
-    onSaveClicked: (LatLng) -> Unit
+    onSaveClicked: () -> Unit
 ) {
-    val context = LocalContext.current
-    var isSaveBtnEnabled by remember { mutableStateOf(true) }
 
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        GoogleMap(
-            modifier = Modifier.fillMaxSize(),
-            cameraPositionState = cameraPositionState,
-            properties = MapProperties(mapType = MapType.HYBRID),
-            uiSettings = MapUiSettings().copy(zoomControlsEnabled = false),
-            onMapClick = { newPosition ->
-                markerState.position = newPosition
-                markerState.showInfoWindow()
-            }
-        ) {
-            MarkerInfoWindowContent(
-                state = markerState,
-                onClick = {
-                    markerState.hideInfoWindow()
-                    false
-                },
-            ) {
-                Text(
-                    text = LocationUtils.getLocationAddressLine(
-                        context = context,
-                        latitude = markerState.position.latitude,
-                        longitude = markerState.position.longitude
-                    ),
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        }
+        PickingMap(
+            markerState = markerState,
+            cameraPositionState = cameraPositionState
+        )
 
         PlacesSearchBar(
             modifier = Modifier
@@ -141,39 +133,10 @@ private fun PlacePickerScreenContent(
             onPlaceSelected = onPredictionSelected
         )
 
-        Button(
-            modifier = Modifier
-                .padding(horizontal = 24.dp)
-                .padding(bottom = 32.dp)
-                .fillMaxWidth()
-                .height(56.dp)
-                .align(Alignment.BottomCenter),
-            shape = RoundedCornerShape(16.dp),
-            enabled = isSaveBtnEnabled,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
-                disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.75f)
-            ),
-            onClick = {
-                onSaveClicked(markerState.position)
-            }
-        ) {
-            when (savePlaceState) {
-                ActionResult.LOADING -> {
-                    CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary)
-                    isSaveBtnEnabled = false
-                }
-
-                else -> {
-                    Text(
-                        text = stringResource(R.string.save),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Medium
-                    )
-                    isSaveBtnEnabled = true
-                }
-            }
-        }
+        SaveButton(
+            modifier = Modifier.align(Alignment.BottomCenter),
+            savePlaceState = savePlaceState,
+            onSaveClicked = onSaveClicked
+        )
     }
 }

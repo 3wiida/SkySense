@@ -13,6 +13,8 @@ interface WeatherRepository {
         longitude: Double
     ): Flow<WeatherDetails>
 
+    fun getSavedPlacesDetails(): Flow<List<WeatherDetails>>
+
     fun fetchPlacePredictions(
         placesClient: PlacesClient,
         query: String

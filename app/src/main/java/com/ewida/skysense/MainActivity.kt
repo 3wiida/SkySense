@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
         }
 
         val startDestination = if (hasLocationPermission())
-            Screens.WeatherDetails
+            Screens.WeatherDetails(null,null)
         else
             Screens.Permissions
 

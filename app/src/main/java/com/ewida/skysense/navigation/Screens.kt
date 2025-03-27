@@ -7,11 +7,20 @@ sealed class Screens {
     data object Permissions : Screens()
 
     @Serializable
-    data object WeatherDetails : Screens()
+    data class WeatherDetails(
+        val placeLat: Double?,
+        val placeLong: Double?
+    ) : Screens()
 
     @Serializable
-    data object SavedPlaces : Screens()
+    data class SavedPlaces(
+        val currentLocationLat: Double,
+        val currentLocationLong: Double
+    ) : Screens()
 
     @Serializable
-    data object PlacePicker : Screens()
+    data class PlacePicker(
+        val initialLat: Double,
+        val initialLong: Double
+    ) : Screens()
 }

@@ -35,4 +35,8 @@
     <string name="search_for_a_city">Search for a city...</string>
     <string name="save_place_success">Place Saved Successfully</string>
     <string name="save_place_error">oops! can\'t save this place</string>
+    <string name="saved_places">Saved Places</string>
+    <string name="unknown_location">Unknown Location</string>
+    <string name="current_location">Current Location</string>
+    <string name="added_locations">Added Locations</string>
 </resources>

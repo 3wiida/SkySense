@@ -3,6 +3,7 @@ package com.ewida.skysense.data.repository
 import android.util.Log
 import com.ewida.skysense.data.model.WeatherDetails
 import com.ewida.skysense.data.sources.local.LocalDataSource
+import com.ewida.skysense.data.sources.local.LocalDataSourceImpl
 import com.ewida.skysense.data.sources.remote.RemoteDataSource
 import com.google.android.gms.tasks.Task
 import com.google.android.libraries.places.api.net.FetchPlaceResponse
@@ -37,6 +38,10 @@ class WeatherRepositoryImpl(
             if (cachedDetails == null) throw e
         }
     }.flowOn(Dispatchers.IO).distinctUntilChanged()
+
+    override fun getSavedPlacesDetails(): Flow<List<WeatherDetails>> {
+        return localDataSource.getSavedPlacesDetails()
+    }
 
     override fun fetchPlacePredictions(
         placesClient: PlacesClient,
