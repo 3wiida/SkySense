@@ -50,7 +50,8 @@ fun WeatherDetailsScreen(
     viewModel: WeatherDetailsViewModel,
     locationLat: Double?,
     locationLong: Double?,
-    onNavigateToSavedPlaces: (Double?, Double?) -> Unit
+    onNavigateToSavedPlaces: (Double?, Double?) -> Unit,
+    onNavigateToAlerts: (Double?, Double?) -> Unit
 ) {
     val detailsResponse = viewModel.detailsResponse.collectAsStateWithLifecycle()
 
@@ -58,7 +59,6 @@ fun WeatherDetailsScreen(
     var currentLocation by remember { mutableStateOf<Location?>(null) }
     var addressLine by remember { mutableStateOf("") }
 
-    val owner = LocalLifecycleOwner.current
     val context = LocalContext.current
 
     Scaffold(
@@ -70,7 +70,13 @@ fun WeatherDetailsScreen(
                         currentLocation?.longitude?.roundTo(2)
                     )
                 },
-                onAlertsClicked = {},
+                onAlertsClicked = {
+                    Log.d("```TAG```", "WeatherDetailsScreen: Alerts")
+                    onNavigateToAlerts(
+                        currentLocation?.latitude?.roundTo(2),
+                        currentLocation?.longitude?.roundTo(2)
+                    )
+                },
                 onSettingsClicked = {}
             )
         }
@@ -214,8 +220,3 @@ private fun WeatherDetailsUI(
         )
     }
 }
-
-
-
-
-

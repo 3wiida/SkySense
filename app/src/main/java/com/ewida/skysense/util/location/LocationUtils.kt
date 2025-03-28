@@ -40,12 +40,16 @@ object LocationUtils {
         latitude: Double,
         longitude: Double,
     ): Address? {
-        val addresses = Geocoder(context).getFromLocation(
-            latitude,
-            longitude,
-            1
-        )
-        return addresses?.firstOrNull()
+        return try {
+            val addresses = Geocoder(context).getFromLocation(
+                latitude,
+                longitude,
+                1
+            )
+            addresses?.firstOrNull()
+        }catch (_: Exception){
+            null
+        }
     }
 
 }

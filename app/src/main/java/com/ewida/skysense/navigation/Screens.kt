@@ -23,4 +23,16 @@ sealed class Screens {
         val initialLat: Double,
         val initialLong: Double
     ) : Screens()
+
+    @Serializable
+    data class Alerts(
+        val currentLocationLat: Double,
+        val currentLocationLong: Double
+    ) : Screens()
+
+    @Serializable
+    data class AddAlert(
+        val currentLocationLat: Double,
+        val currentLocationLong: Double
+    ) : Screens()
 }

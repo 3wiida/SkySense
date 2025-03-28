@@ -9,6 +9,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.ewida.skysense.addalert.AddAlertScreen
+import com.ewida.skysense.alerts.AlertsScreen
 import com.ewida.skysense.data.repository.WeatherRepositoryImpl
 import com.ewida.skysense.data.sources.local.LocalDataSourceImpl
 import com.ewida.skysense.data.sources.local.db.WeatherDatabase
@@ -42,7 +44,7 @@ fun AppNavHost(
         composable<Screens.Permissions> {
             PermissionRequestScreen(
                 onNavigateToWeatherDetails = {
-                    navHostController.navigate(Screens.WeatherDetails) {
+                    navHostController.navigate(Screens.WeatherDetails(null, null)) {
                         popUpTo(Screens.Permissions) {
                             inclusive = true
                         }
@@ -66,6 +68,15 @@ fun AppNavHost(
                             currentLocationLong = long ?: 0.0
                         )
                     )
+                },
+                onNavigateToAlerts = { lat, long ->
+                    navHostController.navigate(
+                        Screens.Alerts(
+                            currentLocationLat = lat ?: 0.0,
+                            currentLocationLong = long ?: 0.0
+                        )
+                    )
+
                 }
             )
         }
@@ -118,6 +129,36 @@ fun AppNavHost(
                     )
                 ),
                 onNavigateUp = { navHostController.navigateUp() }
+            )
+        }
+
+        composable<Screens.Alerts> { navBackStackEntry ->
+            val data = navBackStackEntry.toRoute<Screens.Alerts>()
+            AlertsScreen(
+                currentLocationLat = data.currentLocationLat,
+                currentLocationLong = data.currentLocationLong,
+                onNavigateToAddAlert = {
+                    navHostController.navigate(
+                        Screens.AddAlert(
+                            currentLocationLat = data.currentLocationLat,
+                            currentLocationLong = data.currentLocationLong
+                        )
+                    )
+                },
+                onNavigateUp = {
+                    navHostController.navigateUp()
+                }
+            )
+        }
+
+        composable<Screens.AddAlert> { navBackStackEntry ->
+            val data = navBackStackEntry.toRoute<Screens.AddAlert>()
+            AddAlertScreen(
+                currentLocationLat = data.currentLocationLat,
+                currentLocationLong = data.currentLocationLong,
+                onNavigateUp = {
+                    navHostController.navigateUp()
+                }
             )
         }
     }

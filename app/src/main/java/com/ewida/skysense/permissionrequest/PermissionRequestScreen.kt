@@ -3,7 +3,6 @@ package com.ewida.skysense.permissionrequest
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
 import androidx.activity.compose.LocalActivity
@@ -44,8 +43,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.ewida.skysense.R
-import com.ewida.skysense.permissionrequest.dialogs.PermissionDialog
+import com.ewida.skysense.common.PermissionDialog
 import com.ewida.skysense.ui.theme.SkySenseTheme
+import com.ewida.skysense.util.PermissionUtils
 import com.ewida.skysense.util.hasLocationPermission
 
 
@@ -63,7 +63,8 @@ fun PermissionRequestScreen(
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { result ->
-        onPermissionResult(
+        PermissionUtils.onPermissionResult(
+            permission = Manifest.permission.ACCESS_COARSE_LOCATION,
             isPermissionGranted = result,
             activity = activity,
             onGranted = {
@@ -104,7 +105,7 @@ fun PermissionRequestScreen(
     ) {
         AppSettingsDialog(
             onSettingsClicked = {
-                openAppSettings(activity)
+                PermissionUtils.openAppSettings(activity)
             },
             onCancelClicked = {
                 isShowSettingsDialog = false
@@ -196,7 +197,7 @@ private fun RationalDialog(
     onDismiss: () -> Unit
 ) {
     PermissionDialog(
-        image = R.drawable.location_rational_img,
+        image = R.drawable.notification_permission_img,
         title = R.string.location_rational_title,
         content = R.string.location_rational_content,
         positiveButtonLabel = R.string.allow,
@@ -230,34 +231,5 @@ private fun PermissionScreenPreview() {
         PermissionRequestScreenContent(
             onAllowClicked = {}
         )
-    }
-}
-
-private fun onPermissionResult(
-    isPermissionGranted: Boolean,
-    activity: Activity?,
-    onGranted: () -> Unit,
-    onShowRational: () -> Unit,
-    onPermanentlyRefused: () -> Unit
-) {
-    if (isPermissionGranted) {
-        onGranted()
-    } else {
-        if (activity?.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION) == true) {
-            onShowRational()
-        } else {
-
-            onPermanentlyRefused()
-        }
-    }
-}
-
-private fun openAppSettings(activity: Activity?) {
-    activity?.let {
-        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-            data = Uri.fromParts("package", it.packageName, null)
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
-        it.startActivity(intent)
     }
 }

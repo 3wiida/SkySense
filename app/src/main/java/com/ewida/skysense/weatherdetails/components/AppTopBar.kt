@@ -70,7 +70,7 @@ fun AppTopBar(
                     },
                     onClick = {
                         isMenuExpanded = false
-                        onAlertsClicked
+                        onAlertsClicked()
                     }
                 )
 

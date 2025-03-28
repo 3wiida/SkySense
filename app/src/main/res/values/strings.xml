@@ -39,4 +39,22 @@
     <string name="unknown_location">Unknown Location</string>
     <string name="current_location">Current Location</string>
     <string name="added_locations">Added Locations</string>
+    <string name="your_alerts">Your Alerts</string>
+    <string name="add_alert">Add Alert</string>
+    <string name="alarm_location">Alert Location</string>
+    <string name="alert_settings">Alert Settings</string>
+    <string name="select_alert_date">Select Alert Date</string>
+    <string name="select_alert_time">Select Alert Time</string>
+    <string name="alert_by">Alert By</string>
+    <string name="pick_a_date">Pick a Date</string>
+    <string name="pick_a_time">Pick a Time</string>
+    <string name="notification">Notification</string>
+    <string name="alert_popup">Alert Popup</string>
+    <string name="set_alert">Set Alert</string>
+    <string name="enable_notification_in_settings">Enable Notification In Settings</string>
+    <string name="notification_settings_content">Notification permission is necessary to get alerts by notification, but it has been disabled. Please go to your device settings and enable notification permission for this app</string>
+    <string name="notification_permission_needed">Notification Permission Needed</string>
+    <string name="notification_rational_content">To get weather alerts by notification, notification permission is essential. Please enable it to continue.</string>
+    <string name="enable_display_over_other_apps">Enable Display Over Other Apps</string>
+    <string name="overlay_rational_content">To get weather alerts by alerts, display over other apps permission is essential. Please enable it in the settings to continue.</string>
 </resources>

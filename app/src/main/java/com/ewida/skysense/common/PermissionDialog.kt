@@ -1,4 +1,4 @@
-package com.ewida.skysense.permissionrequest.dialogs
+package com.ewida.skysense.common
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
