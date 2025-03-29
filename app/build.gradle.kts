@@ -93,4 +93,10 @@ dependencies {
 
     //Places API
     implementation (libs.places.v330)
+
+    //Work Manager
+    implementation(libs.androidx.work.runtime.ktx)
+
+    //Constraint Layout
+    implementation(libs.androidx.constraintlayout)
 }

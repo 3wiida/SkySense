@@ -13,7 +13,7 @@ data class Hourly(
     val weather: List<Weather>,
 ){
     fun getHourFromUnixTimeStamp(timestamp: Long): String {
-        val formatter = DateTimeFormatter.ofPattern("hh a")
+        val formatter = DateTimeFormatter.ofPattern("hh a") //02 AM
         return Instant.ofEpochSecond(timestamp)
             .atZone(ZoneId.systemDefault())
             .format(formatter)

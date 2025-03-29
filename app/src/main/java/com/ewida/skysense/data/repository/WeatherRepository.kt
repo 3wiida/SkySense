@@ -8,10 +8,15 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import kotlinx.coroutines.flow.Flow
 
 interface WeatherRepository {
-    suspend fun getWeatherDetails(
+    fun getWeatherDetails(
         latitude: Double,
         longitude: Double
     ): Flow<WeatherDetails>
+
+    suspend fun getRemoteWeatherDetails(
+        latitude: Double,
+        longitude: Double
+    ): WeatherDetails
 
     fun getSavedPlacesDetails(): Flow<List<WeatherDetails>>
 

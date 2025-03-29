@@ -15,7 +15,8 @@ abstract class WeatherDatabase : RoomDatabase() {
 
     companion object {
         private const val DATABASE_NAME = "WEATHER_DATABASE"
-        @Volatile private var instance: WeatherDatabase? = null
+        @Volatile
+        private var instance: WeatherDatabase? = null
 
         fun getInstance(context: Context): WeatherDatabase {
             return instance ?: synchronized(lock = this) {

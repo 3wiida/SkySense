@@ -71,7 +71,6 @@ fun WeatherDetailsScreen(
                     )
                 },
                 onAlertsClicked = {
-                    Log.d("```TAG```", "WeatherDetailsScreen: Alerts")
                     onNavigateToAlerts(
                         currentLocation?.latitude?.roundTo(2),
                         currentLocation?.longitude?.roundTo(2)

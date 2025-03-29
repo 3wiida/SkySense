@@ -32,7 +32,7 @@ fun AppNavHost(
     startDestination: Screens
 ) {
     val context = LocalContext.current
-    val repository = WeatherRepositoryImpl(
+    val repository = WeatherRepositoryImpl.getInstance(
         localDataSource = LocalDataSourceImpl(dao = WeatherDatabase.getInstance(context).getDao()),
         remoteDataSource = RemoteDataSourceImpl(apiServices = ApiClient.getApiServices())
     )

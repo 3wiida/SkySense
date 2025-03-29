@@ -13,6 +13,12 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,12 +28,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.ewida.skysense.R
 import com.ewida.skysense.common.PermissionDialog
 import com.ewida.skysense.util.PermissionUtils
 import com.ewida.skysense.util.enums.AlertType
 import com.ewida.skysense.util.hasNotificationPermission
+import com.ewida.skysense.workers.AlertWorker
 import java.util.Calendar
+import java.util.concurrent.TimeUnit
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
@@ -41,6 +56,7 @@ fun AlertSettings(
     var selectedDate by remember { mutableStateOf("") }
     var selectedTime by remember { mutableStateOf("") }
     var alertType by remember { mutableStateOf(AlertType.NONE) }
+
     var isShowNotificationRationalDialog by remember { mutableStateOf(false) }
     var isShowSettingsDialog by remember { mutableStateOf(false) }
     var isShowOverlayRationalDialog by remember { mutableStateOf(false) }
@@ -63,6 +79,7 @@ fun AlertSettings(
     }
 
     val openDatePicker = {
+        val today = Calendar.getInstance()
         DatePickerDialog(
             context,
             { _, year, month, dayOfMonth ->
@@ -71,7 +88,9 @@ fun AlertSettings(
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DAY_OF_MONTH)
-        ).show()
+        ).apply {
+            datePicker.minDate = today.timeInMillis
+        }.show()
     }
 
     val openTimePicker = {
@@ -121,10 +140,46 @@ fun AlertSettings(
             }
         )
 
-        SetAlertButton(
-            modifier = Modifier.align(Alignment.BottomCenter),
-            onSetAlertClicked = onSetAlertClicked
-        )
+        Button(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .height(56.dp),
+            shape = RoundedCornerShape(12.dp),
+            enabled = selectedDate.isNotEmpty() && selectedTime.isNotEmpty() && alertType != AlertType.NONE,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
+                disabledContentColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f)
+            ),
+            onClick = {
+                onSetAlertClicked()
+                val request = OneTimeWorkRequestBuilder<AlertWorker>().setInputData(
+                    workDataOf(
+                        AlertWorker.ALERT_LAT_KEY to 30.1,
+                        AlertWorker.ALERT_LONG_KEY to 31.2,
+                        AlertWorker.ALERT_DATE_KEY to selectedDate,
+                        AlertWorker.ALERT_TIME_KEY to selectedTime,
+                        AlertWorker.ALERT_TYPE_KEY to alertType.name
+                    )
+                ).setConstraints(
+                    Constraints.Builder()
+                        .setRequiresBatteryNotLow(false)
+                        .setRequiresCharging(false)
+                        .setRequiresDeviceIdle(false)
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                        .build()
+                ).setInitialDelay(5, TimeUnit.SECONDS).build()
+                WorkManager.getInstance(context).enqueue(request)
+            }
+        ) {
+            Text(
+                text = stringResource(R.string.set_alert),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Medium
+            )
+        }
     }
 
     AnimatedVisibility(

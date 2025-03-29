@@ -78,7 +78,4 @@ private fun AddAlertScreenContent(
             onSetAlertClicked = {}
         )
     }
-
-
-
 }

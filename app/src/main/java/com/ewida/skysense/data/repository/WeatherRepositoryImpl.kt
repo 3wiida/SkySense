@@ -1,9 +1,7 @@
 package com.ewida.skysense.data.repository
 
-import android.util.Log
 import com.ewida.skysense.data.model.WeatherDetails
 import com.ewida.skysense.data.sources.local.LocalDataSource
-import com.ewida.skysense.data.sources.local.LocalDataSourceImpl
 import com.ewida.skysense.data.sources.remote.RemoteDataSource
 import com.google.android.gms.tasks.Task
 import com.google.android.libraries.places.api.net.FetchPlaceResponse
@@ -15,12 +13,12 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-class WeatherRepositoryImpl(
+class WeatherRepositoryImpl private constructor(
     private val localDataSource: LocalDataSource,
     private val remoteDataSource: RemoteDataSource
 ) : WeatherRepository {
 
-    override suspend fun getWeatherDetails(
+    override fun getWeatherDetails(
         latitude: Double,
         longitude: Double
     ): Flow<WeatherDetails> = flow {
@@ -39,6 +37,13 @@ class WeatherRepositoryImpl(
         }
     }.flowOn(Dispatchers.IO).distinctUntilChanged()
 
+    override suspend fun getRemoteWeatherDetails(
+        latitude: Double,
+        longitude: Double
+    ): WeatherDetails {
+        return remoteDataSource.getWeatherDetails(latitude, longitude)
+    }
+
     override fun getSavedPlacesDetails(): Flow<List<WeatherDetails>> {
         return localDataSource.getSavedPlacesDetails()
     }
@@ -55,5 +60,19 @@ class WeatherRepositoryImpl(
         placeId: String
     ): Task<FetchPlaceResponse> {
         return remoteDataSource.fetchPlaceDetails(placesClient, placeId)
+    }
+
+    companion object {
+        private var instance: WeatherRepositoryImpl? = null
+        fun getInstance(
+            localDataSource: LocalDataSource,
+            remoteDataSource: RemoteDataSource
+        ): WeatherRepositoryImpl {
+            return instance ?: synchronized(lock = this) {
+                val repo = WeatherRepositoryImpl(localDataSource, remoteDataSource)
+                instance = repo
+                repo
+            }
+        }
     }
 }
