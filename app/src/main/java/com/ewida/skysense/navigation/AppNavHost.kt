@@ -1,5 +1,6 @@
 package com.ewida.skysense.navigation
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
@@ -10,7 +11,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.ewida.skysense.addalert.AddAlertScreen
+import com.ewida.skysense.addalert.AddAlertViewModel
 import com.ewida.skysense.alerts.AlertsScreen
+import com.ewida.skysense.alerts.AlertsViewModel
 import com.ewida.skysense.data.repository.WeatherRepositoryImpl
 import com.ewida.skysense.data.sources.local.LocalDataSourceImpl
 import com.ewida.skysense.data.sources.local.db.WeatherDatabase
@@ -26,6 +29,7 @@ import com.ewida.skysense.weatherdetails.WeatherDetailsViewModel
 import com.ewida.skysense.weatherdetails.WeatherDetailsViewModel.WeatherDetailsViewModelFactory
 import com.google.android.libraries.places.api.Places
 
+@SuppressLint("NewApi")
 @Composable
 fun AppNavHost(
     navHostController: NavHostController = rememberNavController(),
@@ -135,8 +139,9 @@ fun AppNavHost(
         composable<Screens.Alerts> { navBackStackEntry ->
             val data = navBackStackEntry.toRoute<Screens.Alerts>()
             AlertsScreen(
-                currentLocationLat = data.currentLocationLat,
-                currentLocationLong = data.currentLocationLong,
+                viewModel = viewModel(
+                    factory = AlertsViewModel.AlertsViewModelFactory(repository = repository)
+                ),
                 onNavigateToAddAlert = {
                     navHostController.navigate(
                         Screens.AddAlert(
@@ -154,6 +159,9 @@ fun AppNavHost(
         composable<Screens.AddAlert> { navBackStackEntry ->
             val data = navBackStackEntry.toRoute<Screens.AddAlert>()
             AddAlertScreen(
+                viewModel = viewModel(
+                    factory = AddAlertViewModel.AddAlertViewModelFactory(repository = repository)
+                ),
                 currentLocationLat = data.currentLocationLat,
                 currentLocationLong = data.currentLocationLong,
                 onNavigateUp = {

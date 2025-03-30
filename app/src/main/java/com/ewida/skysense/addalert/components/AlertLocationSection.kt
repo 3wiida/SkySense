@@ -57,8 +57,7 @@ fun AlertLocationSection(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(250.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .shadow(elevation = 8.dp),
+                .clip(RoundedCornerShape(12.dp)),
             cameraPositionState = cameraPositionState,
             uiSettings = MapUiSettings().copy(
                 zoomControlsEnabled = false,

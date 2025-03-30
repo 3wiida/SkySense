@@ -1,5 +1,6 @@
 package com.ewida.skysense.data.repository
 
+import com.ewida.skysense.data.model.WeatherAlert
 import com.ewida.skysense.data.model.WeatherDetails
 import com.ewida.skysense.data.sources.local.LocalDataSource
 import com.ewida.skysense.data.sources.remote.RemoteDataSource
@@ -60,6 +61,22 @@ class WeatherRepositoryImpl private constructor(
         placeId: String
     ): Task<FetchPlaceResponse> {
         return remoteDataSource.fetchPlaceDetails(placesClient, placeId)
+    }
+
+    override suspend fun saveWeatherAlert(weatherAlert: WeatherAlert) {
+        localDataSource.saveWeatherAlert(weatherAlert)
+    }
+
+    override suspend fun deleteWeatherAlert(weatherAlert: WeatherAlert) {
+        localDataSource.deleteWeatherAlert(weatherAlert)
+    }
+
+    override suspend fun deleteAlertByID(alertID: String) {
+        localDataSource.deleteAlertByID(alertID)
+    }
+
+    override fun getAllWeatherAlerts(): Flow<List<WeatherAlert>> {
+        return localDataSource.getAllWeatherAlerts()
     }
 
     companion object {

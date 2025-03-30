@@ -1,5 +1,6 @@
 package com.ewida.skysense.data.repository
 
+import com.ewida.skysense.data.model.WeatherAlert
 import com.ewida.skysense.data.model.WeatherDetails
 import com.google.android.gms.tasks.Task
 import com.google.android.libraries.places.api.net.FetchPlaceResponse
@@ -29,4 +30,12 @@ interface WeatherRepository {
         placesClient: PlacesClient,
         placeId: String,
     ): Task<FetchPlaceResponse>
+
+    suspend fun saveWeatherAlert(weatherAlert: WeatherAlert)
+
+    suspend fun deleteWeatherAlert(weatherAlert: WeatherAlert)
+
+    suspend fun deleteAlertByID(alertID: String)
+
+    fun getAllWeatherAlerts(): Flow<List<WeatherAlert>>
 }

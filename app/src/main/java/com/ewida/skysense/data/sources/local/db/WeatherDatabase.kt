@@ -5,10 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.ewida.skysense.data.model.WeatherAlert
 import com.ewida.skysense.data.model.WeatherDetails
 import com.ewida.skysense.data.sources.local.db.typeconverters.WeatherConverters
 
-@Database(entities = [WeatherDetails::class], version = 1)
+@Database(entities = [WeatherDetails::class, WeatherAlert::class], version = 2)
 @TypeConverters(WeatherConverters::class)
 abstract class WeatherDatabase : RoomDatabase() {
     abstract fun getDao(): WeatherDao
@@ -24,7 +25,7 @@ abstract class WeatherDatabase : RoomDatabase() {
                     context = context,
                     klass = WeatherDatabase::class.java,
                     name = DATABASE_NAME
-                ).build()
+                ).fallbackToDestructiveMigration().build()
                 instance = db
                 db
             }

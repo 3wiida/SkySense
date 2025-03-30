@@ -1,3 +1,4 @@
+/*
 package com.ewida.skysense.addalert.components
 
 import android.Manifest
@@ -11,10 +12,14 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -37,6 +42,7 @@ import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.ewida.skysense.R
 import com.ewida.skysense.common.PermissionDialog
+import com.ewida.skysense.data.model.WeatherAlert
 import com.ewida.skysense.util.PermissionUtils
 import com.ewida.skysense.util.enums.AlertType
 import com.ewida.skysense.util.hasNotificationPermission
@@ -53,8 +59,9 @@ fun AlertSettings(
     val activity = LocalActivity.current
 
     val calendar = Calendar.getInstance()
-    var selectedDate by remember { mutableStateOf("") }
-    var selectedTime by remember { mutableStateOf("") }
+    var alert by remember { mutableStateOf(WeatherAlert()) }
+
+
     var alertType by remember { mutableStateOf(AlertType.NONE) }
 
     var isShowNotificationRationalDialog by remember { mutableStateOf(false) }
@@ -78,42 +85,16 @@ fun AlertSettings(
         )
     }
 
-    val openDatePicker = {
-        val today = Calendar.getInstance()
-        DatePickerDialog(
-            context,
-            { _, year, month, dayOfMonth ->
-                selectedDate = "$dayOfMonth/${month + 1}/$year"
-            },
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        ).apply {
-            datePicker.minDate = today.timeInMillis
-        }.show()
-    }
 
-    val openTimePicker = {
-        TimePickerDialog(
-            context,
-            { _, hour, minute ->
-                selectedTime = "$hour:$minute"
-            },
-            calendar.get(Calendar.HOUR_OF_DAY),
-            calendar.get(Calendar.MINUTE),
-            false
-        ).show()
-    }
-
-    Box(
-        modifier = Modifier.fillMaxSize()
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
     ) {
         AlertOptions(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.TopCenter),
-            selectedDate = selectedDate,
-            selectedTime = selectedTime,
+            modifier = Modifier.fillMaxWidth(),
+            selectedDate = alert.date,
+            selectedTime = alert.time,
             alertType = alertType,
             onPickDateClicked = openDatePicker,
             onPickTimeClicked = openTimePicker,
@@ -139,47 +120,6 @@ fun AlertSettings(
                 }
             }
         )
-
-        Button(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .height(56.dp),
-            shape = RoundedCornerShape(12.dp),
-            enabled = selectedDate.isNotEmpty() && selectedTime.isNotEmpty() && alertType != AlertType.NONE,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
-                disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
-                disabledContentColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f)
-            ),
-            onClick = {
-                onSetAlertClicked()
-                val request = OneTimeWorkRequestBuilder<AlertWorker>().setInputData(
-                    workDataOf(
-                        AlertWorker.ALERT_LAT_KEY to 30.1,
-                        AlertWorker.ALERT_LONG_KEY to 31.2,
-                        AlertWorker.ALERT_DATE_KEY to selectedDate,
-                        AlertWorker.ALERT_TIME_KEY to selectedTime,
-                        AlertWorker.ALERT_TYPE_KEY to alertType.name
-                    )
-                ).setConstraints(
-                    Constraints.Builder()
-                        .setRequiresBatteryNotLow(false)
-                        .setRequiresCharging(false)
-                        .setRequiresDeviceIdle(false)
-                        .setRequiredNetworkType(NetworkType.CONNECTED)
-                        .build()
-                ).setInitialDelay(5, TimeUnit.SECONDS).build()
-                WorkManager.getInstance(context).enqueue(request)
-            }
-        ) {
-            Text(
-                text = stringResource(R.string.set_alert),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Medium
-            )
-        }
     }
 
     AnimatedVisibility(
@@ -273,3 +213,4 @@ private fun OverlayRationalDialog(
     )
 }
 
+*/

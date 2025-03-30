@@ -1,44 +1,44 @@
 package com.ewida.skysense.alerts
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.ewida.skysense.R
-import com.ewida.skysense.saved.components.SavedPlaceItem
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.work.WorkManager
+import com.ewida.skysense.alerts.components.AlertsEmptyState
+import com.ewida.skysense.alerts.components.AlertsScreenHeader
+import com.ewida.skysense.alerts.components.SingleAlertItem
+import com.ewida.skysense.data.model.WeatherAlert
+import java.util.UUID
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AlertsScreen(
-    currentLocationLat: Double,
-    currentLocationLong: Double,
+    viewModel: AlertsViewModel,
     onNavigateToAddAlert: () -> Unit,
     onNavigateUp: () -> Unit
 ) {
+    val context = LocalContext.current
+    val savedAlerts = viewModel.savedAlerts.collectAsStateWithLifecycle()
+
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
@@ -54,14 +54,27 @@ fun AlertsScreen(
         }
     ) {
         AlertsScreenContent(
-            onBackClicked = onNavigateUp
+            onBackClicked = onNavigateUp,
+            alerts = savedAlerts.value,
+            onAlarmDeleteClicked = { alert ->
+                viewModel.deleteAlert(alert)
+                WorkManager.getInstance(context).cancelWorkById(UUID.fromString(alert.id))
+            }
         )
+
+        AnimatedVisibility(
+            visible = savedAlerts.value.isEmpty()
+        ) {
+            AlertsEmptyState()
+        }
     }
 }
 
 @Composable
 private fun AlertsScreenContent(
-    onBackClicked: () -> Unit
+    alerts: List<WeatherAlert>,
+    onBackClicked: () -> Unit,
+    onAlarmDeleteClicked: (WeatherAlert) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -70,30 +83,20 @@ private fun AlertsScreenContent(
             .padding(horizontal = 24.dp, vertical = 42.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 24.dp),
-            verticalAlignment = Alignment.CenterVertically
+        AlertsScreenHeader(
+            onBackClicked = onBackClicked
+        )
+
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            IconButton(
-                onClick = onBackClicked
-            ) {
-                Icon(
-                    modifier = Modifier.size(28.dp),
-                    painter = painterResource(R.drawable.ic_back),
-                    contentDescription = null
+            items(items = alerts) { alert ->
+                SingleAlertItem(
+                    alert = alert,
+                    onDeleteClicked = onAlarmDeleteClicked
                 )
             }
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(R.string.your_alerts),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleLarge,
-                fontSize = 18.sp,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-
         }
     }
 }

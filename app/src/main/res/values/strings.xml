@@ -58,4 +58,7 @@
     <string name="enable_display_over_other_apps">Enable Display Over Other Apps</string>
     <string name="overlay_rational_content">To get weather alerts by alerts, display over other apps permission is essential. Please enable it in the settings to continue.</string>
     <string name="weather_alerts">Weather Alerts</string>
+    <string name="no_weather_alerts_yet">No Weather Alerts Yet</string>
+    <string name="alerts_empty_description">Stay informed by setting up alerts for severe weather conditions.</string>
+    <string name="weather_in_will_be">Weather in %1$s will be %2$s</string>
 </resources>

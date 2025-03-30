@@ -8,6 +8,7 @@ import android.graphics.PixelFormat
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Looper
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.WindowManager
@@ -42,8 +43,10 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.setViewTreeLifecycleOwner
 import androidx.work.CoroutineWorker
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
+import androidx.work.workDataOf
 import com.ewida.skysense.MainActivity
 import com.ewida.skysense.R
 import com.ewida.skysense.data.model.WeatherDetails
@@ -58,10 +61,11 @@ import com.ewida.skysense.data.sources.remote.RemoteDataSourceImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import java.util.concurrent.TimeUnit
 
 class AlertWorker(
     private val context: Context,
-    workerParams: WorkerParameters
+    private val workerParams: WorkerParameters
 ) : CoroutineWorker(context, workerParams) {
 
     private val repo = WeatherRepositoryImpl.getInstance(
@@ -73,8 +77,6 @@ class AlertWorker(
     override suspend fun doWork(): Result {
         val lat = inputData.getDouble(ALERT_LAT_KEY, 0.0)
         val long = inputData.getDouble(ALERT_LONG_KEY, 0.0)
-        //val date = inputData.getString(ALERT_DATE_KEY)
-        //val time = inputData.getString(ALERT_TIME_KEY)
         val type = inputData.getString(ALERT_TYPE_KEY)
 
         val cityName = LocationUtils.getLocationAddressLine(context, lat, long)?.subAdminArea
@@ -91,6 +93,7 @@ class AlertWorker(
             }
         }
 
+        repo.deleteAlertByID(workerParams.id.toString())
         return Result.Success()
     }
 
@@ -129,12 +132,15 @@ class AlertWorker(
         withContext(Dispatchers.Main) {
             val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
-            // Inflate XML layout
             val inflater = LayoutInflater.from(context)
             val popupView = inflater.inflate(R.layout.weather_alert_layout, null)
 
+            popupView.findViewById<TextView>(R.id.tvWeatherDetails).text = context.getString(
+                R.string.weather_in_will_be,
+                cityName,
+                details.current.weather.first().description
+            )
 
-            popupView.findViewById<TextView>(R.id.tvWeatherDetails).text = "Weather in $cityName will be ${details.current.weather.first().description}"
             popupView.findViewById<Button>(R.id.btnDismiss).setOnClickListener {
                 popupView.animate().apply {
                     translationY(-500f)
@@ -143,13 +149,19 @@ class AlertWorker(
                         windowManager.removeView(popupView)
                     }
                 }.start()
-
             }
+
             popupView.findViewById<Button>(R.id.btnSnooze).setOnClickListener {
-
+                snoozeAlert(details)
+                popupView.animate().apply {
+                    translationY(-500f)
+                    setDuration(500)
+                    withEndAction {
+                        windowManager.removeView(popupView)
+                    }
+                }.start()
             }
 
-            // WindowManager parameters
             val layoutParams = WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -157,7 +169,8 @@ class AlertWorker(
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
                 PixelFormat.TRANSLUCENT
             )
-            layoutParams.gravity = Gravity.TOP
+
+            layoutParams.gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
 
             playAlertSound()
 
@@ -169,6 +182,21 @@ class AlertWorker(
                 .setDuration(500)
                 .start()
         }
+    }
+
+    private fun snoozeAlert(details: WeatherDetails){
+        val snoozeRequest = OneTimeWorkRequestBuilder<AlertWorker>()
+            .setInitialDelay(5, TimeUnit.MINUTES)
+            .setInputData(
+                workDataOf(
+                    ALERT_LAT_KEY to details.lat,
+                    ALERT_LONG_KEY to details.lon,
+                    ALERT_TYPE_KEY to AlertType.POPUP.name
+                )
+            )
+            .build()
+
+        WorkManager.getInstance(context).enqueue(snoozeRequest)
     }
 
     private fun playAlertSound() {
@@ -186,8 +214,6 @@ class AlertWorker(
     companion object {
         const val ALERT_LAT_KEY = "ALERT_LAT_KEY"
         const val ALERT_LONG_KEY = "ALERT_LONG_KEY"
-        const val ALERT_DATE_KEY = "ALERT_DATE_KEY"
-        const val ALERT_TIME_KEY = "ALERT_TIME_KEY"
         const val ALERT_TYPE_KEY = "ALERT_TYPE_KEY"
     }
 
