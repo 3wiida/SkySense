@@ -35,4 +35,7 @@ sealed class Screens {
         val currentLocationLat: Double,
         val currentLocationLong: Double
     ) : Screens()
+
+    @Serializable
+    data object Settings
 }

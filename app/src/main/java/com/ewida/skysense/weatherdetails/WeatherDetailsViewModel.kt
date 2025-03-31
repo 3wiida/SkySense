@@ -6,7 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.ewida.skysense.data.model.ErrorModel
 import com.ewida.skysense.data.model.WeatherDetails
 import com.ewida.skysense.data.repository.WeatherRepository
-import com.ewida.skysense.util.network.NetworkResponse
+import com.ewida.skysense.util.Result
+import com.ewida.skysense.util.enums.AppLanguages
 import com.ewida.skysense.util.network.getError
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,24 +18,26 @@ import java.io.IOException
 
 class WeatherDetailsViewModel(private val repo: WeatherRepository) : ViewModel() {
 
-    private val _detailsResponse = MutableStateFlow<NetworkResponse<WeatherDetails>>(NetworkResponse.Loading)
+    private val _detailsResponse = MutableStateFlow<Result<WeatherDetails>>(Result.Loading)
     val detailsResponse = _detailsResponse.asStateFlow()
 
     fun getWeatherDetails(latitude: Double, longitude: Double) {
         viewModelScope.launch {
-            repo.getWeatherDetails(latitude, longitude)
-                .catch { throwable ->
-                    emitError(throwable)
-                }
-                .collect { details ->
-                    _detailsResponse.value = NetworkResponse.Success(details)
-                }
+            repo.getWeatherDetails(
+                latitude = latitude,
+                longitude = longitude,
+                lang = getLanguage()
+            ).catch { throwable ->
+                emitError(throwable)
+            }.collect { details ->
+                _detailsResponse.value = Result.Success(details)
+            }
         }
     }
 
     private suspend fun emitError(throwable: Throwable) {
         _detailsResponse.emit(
-            NetworkResponse.Failure(
+            Result.Failure(
                 error = when (throwable) {
                     is HttpException -> throwable.getError()
                     is IOException -> ErrorModel(message = "No Internet Connection Available")
@@ -42,6 +45,13 @@ class WeatherDetailsViewModel(private val repo: WeatherRepository) : ViewModel()
                 }
             )
         )
+    }
+
+    private fun getLanguage(): String {
+        return when (repo.getAppSettings().language) {
+            AppLanguages.ENGLISH -> "en"
+            AppLanguages.ARABIC -> "ar"
+        }
     }
 
 

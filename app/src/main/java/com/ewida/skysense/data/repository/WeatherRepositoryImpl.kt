@@ -1,9 +1,11 @@
 package com.ewida.skysense.data.repository
 
+import com.ewida.skysense.data.model.AppSettings
 import com.ewida.skysense.data.model.WeatherAlert
 import com.ewida.skysense.data.model.WeatherDetails
 import com.ewida.skysense.data.sources.local.LocalDataSource
 import com.ewida.skysense.data.sources.remote.RemoteDataSource
+import com.ewida.skysense.util.enums.AppLanguages
 import com.google.android.gms.tasks.Task
 import com.google.android.libraries.places.api.net.FetchPlaceResponse
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
@@ -21,7 +23,9 @@ class WeatherRepositoryImpl private constructor(
 
     override fun getWeatherDetails(
         latitude: Double,
-        longitude: Double
+        longitude: Double,
+        unites: String,
+        lang: String
     ): Flow<WeatherDetails> = flow {
         val cachedDetails = localDataSource.getWeatherDetails(latitude, longitude)
 
@@ -30,7 +34,12 @@ class WeatherRepositoryImpl private constructor(
         }
 
         try {
-            val updatedDetails = remoteDataSource.getWeatherDetails(latitude, longitude)
+            val updatedDetails = remoteDataSource.getWeatherDetails(
+                latitude,
+                longitude,
+                unites,
+                lang
+            )
             localDataSource.saveWeatherDetails(updatedDetails)
             emit(updatedDetails)
         } catch (e: Exception) {
@@ -77,6 +86,14 @@ class WeatherRepositoryImpl private constructor(
 
     override fun getAllWeatherAlerts(): Flow<List<WeatherAlert>> {
         return localDataSource.getAllWeatherAlerts()
+    }
+
+    override fun getAppSettings(): AppSettings {
+        return localDataSource.getAppSettings()
+    }
+
+    override fun saveAppLanguage(language: AppLanguages) {
+        localDataSource.saveAppLanguage(language)
     }
 
     companion object {

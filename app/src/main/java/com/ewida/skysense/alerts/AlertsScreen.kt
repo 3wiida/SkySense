@@ -20,12 +20,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.work.WorkManager
+import com.ewida.skysense.R
 import com.ewida.skysense.alerts.components.AlertsEmptyState
-import com.ewida.skysense.alerts.components.AlertsScreenHeader
 import com.ewida.skysense.alerts.components.SingleAlertItem
+import com.ewida.skysense.common.ScreenHeader
 import com.ewida.skysense.data.model.WeatherAlert
 import java.util.UUID
 
@@ -83,7 +85,8 @@ private fun AlertsScreenContent(
             .padding(horizontal = 24.dp, vertical = 42.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        AlertsScreenHeader(
+        ScreenHeader(
+            title = stringResource(R.string.your_alerts),
             onBackClicked = onBackClicked
         )
 

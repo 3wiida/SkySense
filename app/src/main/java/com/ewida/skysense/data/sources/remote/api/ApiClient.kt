@@ -19,11 +19,12 @@ object ApiClient {
     }.build().create(ApiServices::class.java)
 
     private fun getHttpClient() = OkHttpClient.Builder().apply {
-        addInterceptor(
-            HttpLoggingInterceptor { networkLog ->
-                Log.i(NETWORK_LOG_TAG, networkLog)
-            }
-        )
+        val loggingInterceptor = HttpLoggingInterceptor { message ->
+            Log.i(NETWORK_LOG_TAG, message)
+        }
+        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        addInterceptor(loggingInterceptor)
+
 
         addInterceptor { chain ->
             val request = chain.request()

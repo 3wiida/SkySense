@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
+import com.ewida.skysense.util.formatToDefaultLocale
 
 @Composable
 fun HumidityCard(
@@ -55,7 +56,7 @@ fun HumidityCard(
             )
 
             Text(
-                text = "$humidityPercent%",
+                text = "${humidityPercent.formatToDefaultLocale()}%",
                 style = MaterialTheme.typography.titleLarge,
                 fontSize = 18.sp,
                 color = MaterialTheme.colorScheme.onBackground

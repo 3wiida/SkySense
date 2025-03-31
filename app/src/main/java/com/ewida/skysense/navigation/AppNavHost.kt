@@ -1,6 +1,7 @@
 package com.ewida.skysense.navigation
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
@@ -17,6 +18,7 @@ import com.ewida.skysense.alerts.AlertsViewModel
 import com.ewida.skysense.data.repository.WeatherRepositoryImpl
 import com.ewida.skysense.data.sources.local.LocalDataSourceImpl
 import com.ewida.skysense.data.sources.local.db.WeatherDatabase
+import com.ewida.skysense.data.sources.local.preferences.AppPreferencesImpl
 import com.ewida.skysense.data.sources.remote.RemoteDataSourceImpl
 import com.ewida.skysense.data.sources.remote.api.ApiClient
 import com.ewida.skysense.permissionrequest.PermissionRequestScreen
@@ -24,6 +26,9 @@ import com.ewida.skysense.placepicker.PlacePickerScreen
 import com.ewida.skysense.placepicker.PlacePickerViewModel
 import com.ewida.skysense.saved.SavedPlacesScreen
 import com.ewida.skysense.saved.SavedPlacesViewModel
+import com.ewida.skysense.settings.SettingsScreen
+import com.ewida.skysense.settings.SettingsViewModel
+import com.ewida.skysense.util.Constants
 import com.ewida.skysense.weatherdetails.WeatherDetailsScreen
 import com.ewida.skysense.weatherdetails.WeatherDetailsViewModel
 import com.ewida.skysense.weatherdetails.WeatherDetailsViewModel.WeatherDetailsViewModelFactory
@@ -37,7 +42,15 @@ fun AppNavHost(
 ) {
     val context = LocalContext.current
     val repository = WeatherRepositoryImpl.getInstance(
-        localDataSource = LocalDataSourceImpl(dao = WeatherDatabase.getInstance(context).getDao()),
+        localDataSource = LocalDataSourceImpl(
+            dao = WeatherDatabase.getInstance(context).getDao(),
+            preferences = AppPreferencesImpl(
+                sharedPreferences = context.getSharedPreferences(
+                    Constants.SharedPreferences.SETTINGS_PREFERENCES_NAME,
+                    Context.MODE_PRIVATE
+                )
+            )
+        ),
         remoteDataSource = RemoteDataSourceImpl(apiServices = ApiClient.getApiServices())
     )
 
@@ -80,7 +93,9 @@ fun AppNavHost(
                             currentLocationLong = long ?: 0.0
                         )
                     )
-
+                },
+                onNavigateToSettings = {
+                    navHostController.navigate(Screens.Settings)
                 }
             )
         }
@@ -164,6 +179,17 @@ fun AppNavHost(
                 ),
                 currentLocationLat = data.currentLocationLat,
                 currentLocationLong = data.currentLocationLong,
+                onNavigateUp = {
+                    navHostController.navigateUp()
+                }
+            )
+        }
+
+        composable<Screens.Settings> {
+            SettingsScreen(
+                viewModel = viewModel(
+                    factory = SettingsViewModel.SettingsViewModelFactory(repository = repository)
+                ),
                 onNavigateUp = {
                     navHostController.navigateUp()
                 }

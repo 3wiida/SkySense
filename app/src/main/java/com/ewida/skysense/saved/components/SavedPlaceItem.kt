@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ewida.skysense.R
 import com.ewida.skysense.data.model.WeatherDetails
+import com.ewida.skysense.util.formatToDefaultLocale
 import com.ewida.skysense.util.location.LocationUtils
 
 @Composable
@@ -72,7 +73,7 @@ fun SavedPlaceItem(
             )
 
             Text(
-                text = placeDetails.current.weather.first().main,
+                text = placeDetails.current.weather.first().description,
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onPrimary
@@ -86,7 +87,7 @@ fun SavedPlaceItem(
         ) {
             Text(
                 modifier = Modifier.padding(bottom = 4.dp),
-                text = "${placeDetails.current.temp.toInt()}\u00B0",
+                text = "${placeDetails.current.temp.toInt().formatToDefaultLocale()}\u00B0",
                 style = MaterialTheme.typography.titleMedium,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
@@ -94,7 +95,7 @@ fun SavedPlaceItem(
             )
 
             Text(
-                text = "${placeDetails.daily.first().temp.min.toInt()}\u00B0 / ${placeDetails.daily.first().temp.max.toInt()}\u00B0",
+                text = "${placeDetails.daily.first().temp.min.toInt().formatToDefaultLocale()}\u00B0 / ${placeDetails.daily.first().temp.max.toInt().formatToDefaultLocale()}\u00B0",
                 style = MaterialTheme.typography.labelMedium,
                 fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.onPrimary

@@ -18,13 +18,13 @@ data class WeatherAlert(
 ) {
     fun getDate(): String {
         val date = Date(timeStamp * 1000)
-        val formatter = SimpleDateFormat("MMM, d yyyy", Locale.US)
+        val formatter = SimpleDateFormat("MMM, d yyyy", Locale.getDefault())
         return formatter.format(date)
     }
 
     fun getTime(): String {
         val date = Date(timeStamp * 1000)
-        val formatter = SimpleDateFormat("h:mm a", Locale.US)
+        val formatter = SimpleDateFormat("h:mm a", Locale.getDefault())
         return formatter.format(date)
     }
 }

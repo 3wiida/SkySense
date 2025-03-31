@@ -16,8 +16,15 @@ class RemoteDataSourceImpl(
 
     override suspend fun getWeatherDetails(
         latitude: Double,
-        longitude: Double
-    ): WeatherDetails = apiServices.getWeatherDetails(latitude = latitude, longitude = longitude)
+        longitude: Double,
+        unites: String,
+        lang: String
+    ): WeatherDetails = apiServices.getWeatherDetails(
+        latitude = latitude,
+        longitude = longitude,
+        unites = unites,
+        lang = lang
+    )
 
     override fun fetchPlacePredictions(
         placesClient: PlacesClient,

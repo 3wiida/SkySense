@@ -5,9 +5,38 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.ContextCompat
+import java.text.NumberFormat
+import java.util.Locale
+import kotlin.math.roundToInt
 
 fun Double.roundTo(decimals: Int): Double {
-    return "%.${decimals}f".format(this).toDouble()
+    return "%.${decimals}f".format(Locale.US, this).toDouble()
+}
+
+fun Number.formatToDefaultLocale(): String {
+    val numberFormat: NumberFormat = NumberFormat.getInstance(Locale.getDefault())
+    return numberFormat.format(this)
+}
+
+fun Int.formatTemperature(unit: String): String {
+    val locale = Locale.getDefault()
+    val numberFormat = NumberFormat.getInstance(locale)
+
+    val convertedTemp = when (unit) {
+        "C" -> this
+        "F" -> (this * 9 / 5 + 32.0).roundToInt()
+        "K" -> (this + 273.15).roundToInt()
+        else -> this
+    }
+
+    val translatedUnit = when (unit) {
+        "C" -> if (locale.language == "ar") "°س" else "°C"
+        "K" -> if (locale.language == "ar") "°ك" else "°K"
+        "F" -> if (locale.language == "ar") "°ف" else "°F"
+        else -> unit
+    }
+
+    return "${numberFormat.format(convertedTemp)} $translatedUnit"
 }
 
 fun Context.hasLocationPermission(): Boolean {

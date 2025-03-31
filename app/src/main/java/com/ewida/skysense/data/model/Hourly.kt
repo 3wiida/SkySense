@@ -1,21 +1,16 @@
 package com.ewida.skysense.data.model
 
-import android.util.Log
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.util.Calendar
+import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 data class Hourly(
     val dt: Long,
     val temp: Double,
     val weather: List<Weather>,
-){
+) {
     fun getHourFromUnixTimeStamp(timestamp: Long): String {
-        val formatter = DateTimeFormatter.ofPattern("hh a") //02 AM
-        return Instant.ofEpochSecond(timestamp)
-            .atZone(ZoneId.systemDefault())
-            .format(formatter)
+        val formatter = SimpleDateFormat("hh a", Locale.getDefault())
+        return formatter.format(Date(timestamp * 1000))
     }
 }

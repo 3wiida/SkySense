@@ -1,11 +1,17 @@
 package com.ewida.skysense.data.sources.local
 
+import com.ewida.skysense.data.model.AppSettings
 import com.ewida.skysense.data.model.WeatherAlert
 import com.ewida.skysense.data.model.WeatherDetails
 import com.ewida.skysense.data.sources.local.db.WeatherDao
+import com.ewida.skysense.data.sources.local.preferences.AppPreferences
+import com.ewida.skysense.util.enums.AppLanguages
 import kotlinx.coroutines.flow.Flow
 
-class LocalDataSourceImpl(private val dao: WeatherDao) : LocalDataSource {
+class LocalDataSourceImpl(
+    private val dao: WeatherDao,
+    private val preferences: AppPreferences
+) : LocalDataSource {
     override suspend fun saveWeatherDetails(details: WeatherDetails) {
         dao.saveWeatherDetails(weatherDetails = details)
     }
@@ -35,5 +41,13 @@ class LocalDataSourceImpl(private val dao: WeatherDao) : LocalDataSource {
 
     override fun getAllWeatherAlerts(): Flow<List<WeatherAlert>> {
         return dao.getAllWeatherAlerts()
+    }
+
+    override fun getAppSettings(): AppSettings {
+        return preferences.getAppSettings()
+    }
+
+    override fun saveAppLanguage(language: AppLanguages) {
+        return preferences.saveAppLanguage(language)
     }
 }

@@ -2,7 +2,6 @@ package com.ewida.skysense.weatherdetails
 
 import android.annotation.SuppressLint
 import android.location.Location
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,9 +15,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,14 +24,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ewida.skysense.R
 import com.ewida.skysense.data.model.WeatherDetails
 import com.ewida.skysense.util.location.LocationUtils
-import com.ewida.skysense.util.network.NetworkResponse
+import com.ewida.skysense.util.Result
 import com.ewida.skysense.util.roundTo
 import com.ewida.skysense.weatherdetails.components.AppTopBar
 import com.ewida.skysense.weatherdetails.components.CurrentWeatherSection
@@ -51,7 +45,8 @@ fun WeatherDetailsScreen(
     locationLat: Double?,
     locationLong: Double?,
     onNavigateToSavedPlaces: (Double?, Double?) -> Unit,
-    onNavigateToAlerts: (Double?, Double?) -> Unit
+    onNavigateToAlerts: (Double?, Double?) -> Unit,
+    onNavigateToSettings: () -> Unit
 ) {
     val detailsResponse = viewModel.detailsResponse.collectAsStateWithLifecycle()
 
@@ -76,7 +71,7 @@ fun WeatherDetailsScreen(
                         currentLocation?.longitude?.roundTo(2)
                     )
                 },
-                onSettingsClicked = {}
+                onSettingsClicked = onNavigateToSettings
             )
         }
     ) {
@@ -101,7 +96,7 @@ fun WeatherDetailsScreen(
 
     if (isDaysForecastBottomSheetShown) {
         DailyForecastBottomSheet(
-            forecast = (detailsResponse.value as NetworkResponse.Success).data.daily,
+            forecast = (detailsResponse.value as Result.Success).data.daily,
             onDismiss = {
                 isDaysForecastBottomSheetShown = !isDaysForecastBottomSheetShown
             }
@@ -145,24 +140,24 @@ fun WeatherDetailsScreen(
 @Composable
 private fun WeatherDetailsScreenContent(
     modifier: Modifier = Modifier,
-    detailsResponse: NetworkResponse<WeatherDetails>,
+    detailsResponse: Result<WeatherDetails>,
     addressLine: String,
     onShowDaysForecast: () -> Unit,
     onFailureRetryClicked: () -> Unit
 ) {
     when (detailsResponse) {
-        is NetworkResponse.Loading -> {
+        is Result.Loading -> {
             WeatherDetailsLoadingState()
         }
 
-        is NetworkResponse.Failure -> {
+        is Result.Failure -> {
             WeatherDetailsFailureState(
                 cause = detailsResponse.error.message,
                 onRetryClicked = onFailureRetryClicked
             )
         }
 
-        is NetworkResponse.Success<*> -> {
+        is Result.Success<*> -> {
             detailsResponse.data?.let {
                 WeatherDetailsUI(
                     modifier = modifier,

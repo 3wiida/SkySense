@@ -57,6 +57,7 @@ import com.ewida.skysense.util.location.LocationUtils
 import com.ewida.skysense.data.repository.WeatherRepositoryImpl
 import com.ewida.skysense.data.sources.local.LocalDataSourceImpl
 import com.ewida.skysense.data.sources.local.db.WeatherDatabase
+import com.ewida.skysense.data.sources.local.preferences.AppPreferencesImpl
 import com.ewida.skysense.data.sources.remote.RemoteDataSourceImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -69,7 +70,15 @@ class AlertWorker(
 ) : CoroutineWorker(context, workerParams) {
 
     private val repo = WeatherRepositoryImpl.getInstance(
-        localDataSource = LocalDataSourceImpl(dao = WeatherDatabase.getInstance(context).getDao()),
+        localDataSource = LocalDataSourceImpl(
+            dao = WeatherDatabase.getInstance(context).getDao(),
+            preferences = AppPreferencesImpl(
+                sharedPreferences = context.getSharedPreferences(
+                    Constants.SharedPreferences.SETTINGS_PREFERENCES_NAME,
+                    Context.MODE_PRIVATE
+                )
+            )
+        ),
         remoteDataSource = RemoteDataSourceImpl(apiServices = ApiClient.getApiServices())
     )
 

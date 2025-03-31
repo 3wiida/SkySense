@@ -27,6 +27,8 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.ewida.skysense.R
 import com.ewida.skysense.data.model.Daily
 import com.ewida.skysense.util.Constants
+import com.ewida.skysense.util.formatTemperature
+import com.ewida.skysense.util.formatToDefaultLocale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,7 +56,9 @@ fun DailyForecastBottomSheet(
             )
 
             LazyRow(
-                modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(items = forecast) { dayForecast ->
@@ -104,12 +108,18 @@ private fun SingleDayForecast(dayForecast: Daily) {
         )
 
         Text(
-            text = "H: ${dayForecast.temp.max.toInt()}\u00B0C",
+            text = stringResource(
+                R.string.h_c,
+                dayForecast.temp.max.toInt().formatTemperature("C")
+            ),
             fontWeight = if(dayForecast.isToday()) FontWeight.Bold else FontWeight.Normal
         )
 
         Text(
-            text = "L: ${dayForecast.temp.min.toInt()}\u00B0C",
+            text = stringResource(
+                R.string.l_c,
+                dayForecast.temp.min.toInt().formatTemperature("C")
+            ),
             fontWeight = if(dayForecast.isToday()) FontWeight.Bold else FontWeight.Normal
         )
     }

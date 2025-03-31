@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ewida.skysense.R
+import com.ewida.skysense.util.formatToDefaultLocale
 
 @Composable
 fun WindCard(
@@ -47,7 +48,7 @@ fun WindCard(
             )
 
             Text(
-                text = stringResource(R.string.m_s, windSpeed),
+                text = stringResource(R.string.m_s, windSpeed.formatToDefaultLocale()),
                 style = MaterialTheme.typography.titleLarge,
                 fontSize = 18.sp,
                 color = MaterialTheme.colorScheme.onBackground

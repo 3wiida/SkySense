@@ -154,7 +154,7 @@ fun SingleAlertItem(
                     )
 
                     Text(
-                        text = alert.alertType.capitalize(LocaleList.current),
+                        text = alert.alertType,
                         style = MaterialTheme.typography.labelMedium,
                         fontSize = 12.sp,
                         color = MaterialTheme.colorScheme.onPrimary

@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.ewida.skysense.data.repository.WeatherRepository
 import com.ewida.skysense.util.ActionResult
-import com.ewida.skysense.util.network.NetworkResponse
 import com.ewida.skysense.util.roundTo
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.AutocompletePrediction

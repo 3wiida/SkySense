@@ -241,7 +241,11 @@ fun AlertOptions(
             onClick = {
                 val alert = WeatherAlert(
                     timeStamp = calendar.timeInMillis / 1000,
-                    alertType = alertType.name
+                    alertType = when(alertType){
+                        AlertType.NOTIFICATION -> context.getString(R.string.notificationn)
+                        AlertType.POPUP -> context.getString(R.string.alert_popup)
+                        AlertType.NONE -> ""
+                    }
                 )
                 onSetAlertClicked(alert)
             }

@@ -61,4 +61,11 @@
     <string name="no_weather_alerts_yet">No Weather Alerts Yet</string>
     <string name="alerts_empty_description">Stay informed by setting up alerts for severe weather conditions.</string>
     <string name="weather_in_will_be">Weather in %1$s will be %2$s</string>
+    <string name="language">Language</string>
+    <string name="english">English</string>
+    <string name="arabic">Arabic</string>
+    <string name="h_c">H: %1$s</string>
+    <string name="l_c">L: %1$s</string>
+    <string name="notificationn">Notification</string>
+    <string name="hours_forecast">%1$s Hours Forecast</string>
 </resources>

@@ -24,6 +24,8 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.ewida.skysense.R
 import com.ewida.skysense.data.model.Hourly
 import com.ewida.skysense.util.Constants
+import com.ewida.skysense.util.formatTemperature
+import com.ewida.skysense.util.formatToDefaultLocale
 
 @Composable
 fun HourlyTempSection(
@@ -36,7 +38,7 @@ fun HourlyTempSection(
     ) {
         Text(
             modifier = Modifier.padding(bottom = 8.dp),
-            text = stringResource(R.string._24_hours_forecast),
+            text = stringResource(R.string.hours_forecast, 24.formatToDefaultLocale()),
             fontSize = 18.sp,
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onBackground
@@ -79,7 +81,7 @@ private fun HourlySingleItem(
         )
 
         Text(
-            text = "${hourlyItem.temp.toInt()}\u00B0C",
+            text = hourlyItem.temp.toInt().formatTemperature("C"),
         )
     }
 }

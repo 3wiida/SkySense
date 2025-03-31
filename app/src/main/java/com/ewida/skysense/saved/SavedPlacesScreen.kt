@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ewida.skysense.R
+import com.ewida.skysense.common.ScreenHeader
 import com.ewida.skysense.data.model.WeatherDetails
 import com.ewida.skysense.saved.components.SavedPlaceItem
 
@@ -90,31 +91,10 @@ private fun SavedPlacesScreenContent(
             .padding(horizontal = 24.dp, vertical = 42.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 24.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(
-                onClick = onBackClicked
-            ) {
-                Icon(
-                    modifier = Modifier.size(28.dp),
-                    painter = painterResource(R.drawable.ic_back),
-                    contentDescription = null
-                )
-            }
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(R.string.saved_places),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleLarge,
-                fontSize = 18.sp,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-
-        }
+        ScreenHeader(
+            title = stringResource(R.string.saved_places),
+            onBackClicked = onBackClicked
+        )
 
         if (places.isNotEmpty()) {
             LazyColumn(
@@ -165,10 +145,4 @@ private fun SavedPlacesScreenContent(
             }
         }
     }
-}
-
-@Preview
-@Composable
-private fun SavedPlacesScreenPreview() {
-
 }

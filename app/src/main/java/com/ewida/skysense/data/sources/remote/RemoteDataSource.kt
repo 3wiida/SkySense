@@ -9,7 +9,9 @@ import com.google.android.libraries.places.api.net.PlacesClient
 interface RemoteDataSource {
     suspend fun getWeatherDetails(
         latitude: Double,
-        longitude: Double
+        longitude: Double,
+        unites: String = "metric",
+        lang: String = "en"
     ): WeatherDetails
 
     fun fetchPlacePredictions(

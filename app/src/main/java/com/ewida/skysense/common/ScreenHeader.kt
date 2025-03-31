@@ -1,6 +1,6 @@
-package com.ewida.skysense.alerts.components
+package com.ewida.skysense.common
 
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -11,35 +11,44 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ewida.skysense.R
 
 @Composable
-fun AlertsScreenHeader(
+fun ScreenHeader(
+    title: String,
     onBackClicked: () -> Unit
 ) {
-    Row(
+    val layoutDirection = LocalLayoutDirection.current
+
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 24.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .padding(bottom = 24.dp)
     ) {
         IconButton(
+            modifier = Modifier.align(Alignment.CenterStart),
             onClick = onBackClicked
         ) {
             Icon(
                 modifier = Modifier.size(28.dp),
-                painter = painterResource(R.drawable.ic_back),
+                painter = painterResource(
+                    when(layoutDirection){
+                        LayoutDirection.Ltr ->  R.drawable.ic_back_left
+                        LayoutDirection.Rtl ->  R.drawable.ic_back_right
+                    }
+                ),
                 contentDescription = null
             )
         }
         Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = stringResource(R.string.your_alerts),
+            modifier = Modifier.align(Alignment.Center),
+            text = title,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleLarge,
             fontSize = 18.sp,

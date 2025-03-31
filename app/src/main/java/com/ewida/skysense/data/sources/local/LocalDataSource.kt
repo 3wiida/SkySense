@@ -1,7 +1,9 @@
 package com.ewida.skysense.data.sources.local
 
+import com.ewida.skysense.data.model.AppSettings
 import com.ewida.skysense.data.model.WeatherAlert
 import com.ewida.skysense.data.model.WeatherDetails
+import com.ewida.skysense.util.enums.AppLanguages
 import kotlinx.coroutines.flow.Flow
 
 
@@ -14,4 +16,7 @@ interface LocalDataSource {
     suspend fun deleteWeatherAlert(weatherAlert: WeatherAlert)
     suspend fun deleteAlertByID(alertID: String)
     fun getAllWeatherAlerts(): Flow<List<WeatherAlert>>
+
+    fun getAppSettings(): AppSettings
+    fun saveAppLanguage(language: AppLanguages)
 }

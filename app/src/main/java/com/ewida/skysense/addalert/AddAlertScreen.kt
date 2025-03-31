@@ -2,7 +2,6 @@ package com.ewida.skysense.addalert
 
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -17,15 +16,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.work.Constraints
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
-import com.ewida.skysense.addalert.components.AddAlertHeader
+import com.ewida.skysense.R
 import com.ewida.skysense.addalert.components.AlertLocationSection
 import com.ewida.skysense.addalert.components.AlertOptions
+import com.ewida.skysense.common.ScreenHeader
 import com.ewida.skysense.data.model.WeatherAlert
 import com.ewida.skysense.util.roundTo
 import com.ewida.skysense.workers.AlertWorker
@@ -84,7 +85,8 @@ private fun AddAlertScreenContent(
             .padding(horizontal = 24.dp, vertical = 42.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        AddAlertHeader(
+        ScreenHeader(
+            title = stringResource(R.string.add_alert),
             onBackClicked = onBackClicked
         )
 
