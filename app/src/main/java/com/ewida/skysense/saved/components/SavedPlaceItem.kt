@@ -28,12 +28,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ewida.skysense.R
 import com.ewida.skysense.data.model.WeatherDetails
+import com.ewida.skysense.util.enums.WeatherUnit
+import com.ewida.skysense.util.formatTemperature
 import com.ewida.skysense.util.formatToDefaultLocale
-import com.ewida.skysense.util.location.LocationUtils
+import com.ewida.skysense.util.LocationUtils
 
 @Composable
 fun SavedPlaceItem(
     placeDetails: WeatherDetails,
+    unit: WeatherUnit,
     onPlaceClicked: (WeatherDetails) -> Unit
 ) {
     val context = LocalContext.current
@@ -87,7 +90,7 @@ fun SavedPlaceItem(
         ) {
             Text(
                 modifier = Modifier.padding(bottom = 4.dp),
-                text = "${placeDetails.current.temp.toInt().formatToDefaultLocale()}\u00B0",
+                text = placeDetails.current.temp.toInt().formatTemperature(unit),
                 style = MaterialTheme.typography.titleMedium,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
@@ -95,7 +98,7 @@ fun SavedPlaceItem(
             )
 
             Text(
-                text = "${placeDetails.daily.first().temp.min.toInt().formatToDefaultLocale()}\u00B0 / ${placeDetails.daily.first().temp.max.toInt().formatToDefaultLocale()}\u00B0",
+                text = "${placeDetails.daily.first().temp.min.toInt().formatTemperature(unit)} / ${placeDetails.daily.first().temp.max.toInt().formatTemperature(unit)}",
                 style = MaterialTheme.typography.labelMedium,
                 fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.onPrimary

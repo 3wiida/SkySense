@@ -21,7 +21,8 @@ interface WeatherRepository {
 
     suspend fun getRemoteWeatherDetails(
         latitude: Double,
-        longitude: Double
+        longitude: Double,
+        lang: String
     ): WeatherDetails
 
     fun getSavedPlacesDetails(): Flow<List<WeatherDetails>>

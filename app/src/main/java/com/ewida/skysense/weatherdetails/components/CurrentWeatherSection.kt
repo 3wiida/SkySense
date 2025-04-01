@@ -76,24 +76,9 @@ fun CurrentWeatherSection(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.Bottom
         ) {
-            if (getWeatherIcon(current.weather.first().icon) != -1) {
-                Image(
-                    modifier = Modifier.size(140.dp),
-                    painter = painterResource(getWeatherIcon(current.weather.first().icon)),
-                    contentDescription = "Drawable Image"
-                )
-            } else {
-                GlideImage(
-                    modifier = Modifier.size(140.dp),
-                    model = "${Constants.WEATHER_ICON_BASE_URL}${current.weather.first().icon}.png",
-                    contentDescription = null,
-                    contentScale = ContentScale.FillBounds
-                )
-            }
-
             Column(
                 modifier = Modifier.padding(bottom = 24.dp),
-                horizontalAlignment = Alignment.End,
+                horizontalAlignment = Alignment.Start,
             ) {
                 Text(
                     text = current.temp.toInt().formatTemperature(unit),
@@ -127,6 +112,21 @@ fun CurrentWeatherSection(
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
+            }
+
+            if (getWeatherIcon(current.weather.first().icon) != -1) {
+                Image(
+                    modifier = Modifier.size(140.dp),
+                    painter = painterResource(getWeatherIcon(current.weather.first().icon)),
+                    contentDescription = "Drawable Image"
+                )
+            } else {
+                GlideImage(
+                    modifier = Modifier.size(140.dp),
+                    model = "${Constants.WEATHER_ICON_BASE_URL}${current.weather.first().icon}.png",
+                    contentDescription = null,
+                    contentScale = ContentScale.FillBounds
+                )
             }
         }
 

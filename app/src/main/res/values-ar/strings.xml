@@ -69,6 +69,11 @@
     <string name="l_c">ص: %1$s</string>
     <string name="notificationn">إشعار</string>
     <string name="hours_forecast">توقعات %1$s ساعة</string>
-    <string name="units">Units</string>
-    <string name="standard">Standard</string>
+    <string name="units">الوحدات</string>
+    <string name="metric">متري</string>
+    <string name="standard">قياسي</string>
+    <string name="imperial">إمبراطوري</string>
+    <string name="temperature_by_celsius_and_wind_speed_by_meter_sec">درجة الحرارة بالسيلسيوس وسرعة الرياح بالمتر/ثانية</string>
+    <string name="temperature_by_kelvin_and_wind_speed_by_meter_sec">درجة الحرارة بالكلفن وسرعة الرياح بالمتر/ثانية</string>
+    <string name="temperature_by_fahrenheit_and_wind_speed_by_miles_hour">درجة الحرارة بالفهرنهايت وسرعة الرياح بالأميال/ساعة</string>
 </resources>

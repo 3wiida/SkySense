@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ewida.skysense.R
 import com.ewida.skysense.data.model.WeatherAlert
-import com.ewida.skysense.util.location.LocationUtils
+import com.ewida.skysense.util.LocationUtils
 
 @Composable
 fun SingleAlertItem(

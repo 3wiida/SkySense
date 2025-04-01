@@ -1,14 +1,11 @@
-package com.ewida
+package com.ewida.skysense
 
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.ContentResolver
-import android.content.Context
 import android.media.AudioAttributes
-import android.net.Uri
 import androidx.core.net.toUri
-import com.ewida.skysense.R
 import com.ewida.skysense.util.Constants
 import com.google.android.libraries.places.api.Places
 
@@ -19,9 +16,7 @@ class SkySenseApplication : Application() {
         createAlertsNotificationChannel()
     }
 
-    //TODO check notification sound
     private fun createAlertsNotificationChannel() {
-        // Corrected URI without file extension
         val soundUri =
             "${ContentResolver.SCHEME_ANDROID_RESOURCE}://${packageName}/raw/notification_sound".toUri()
 

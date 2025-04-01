@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ewida.skysense.R
 import com.ewida.skysense.data.model.WeatherDetails
-import com.ewida.skysense.util.location.LocationUtils
+import com.ewida.skysense.util.LocationUtils
 import com.ewida.skysense.util.Result
 import com.ewida.skysense.util.enums.WeatherUnit
 import com.ewida.skysense.util.roundTo

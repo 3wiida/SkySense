@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.ewida.skysense.data.repository.WeatherRepository
 import com.ewida.skysense.util.ActionResult
+import com.ewida.skysense.util.enums.AppLanguage
 import com.ewida.skysense.util.roundTo
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.AutocompletePrediction
@@ -70,12 +71,20 @@ class PlacePickerViewModel(
         viewModelScope.launch {
             repo.getWeatherDetails(
                 latitude = place.latitude.roundTo(2),
-                longitude = place.longitude.roundTo(2)
+                longitude = place.longitude.roundTo(2),
+                lang = getLanguage()
             ).catch { throwable ->
                 _isPlaceSaved.value = ActionResult.FAILED
             }.collect { _ ->
                 _isPlaceSaved.value = ActionResult.COMPLETED
             }
+        }
+    }
+
+    private fun getLanguage(): String {
+        return when (repo.getAppSettings().language) {
+            AppLanguage.ENGLISH -> "en"
+            AppLanguage.ARABIC -> "ar"
         }
     }
 

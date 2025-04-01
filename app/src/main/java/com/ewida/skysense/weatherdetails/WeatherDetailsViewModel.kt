@@ -9,7 +9,7 @@ import com.ewida.skysense.data.repository.WeatherRepository
 import com.ewida.skysense.util.Result
 import com.ewida.skysense.util.enums.AppLanguage
 import com.ewida.skysense.util.enums.WeatherUnit
-import com.ewida.skysense.util.network.getError
+import com.ewida.skysense.util.getError
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch

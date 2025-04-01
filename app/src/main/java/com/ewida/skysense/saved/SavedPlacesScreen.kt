@@ -37,6 +37,7 @@ import com.ewida.skysense.R
 import com.ewida.skysense.common.ScreenHeader
 import com.ewida.skysense.data.model.WeatherDetails
 import com.ewida.skysense.saved.components.SavedPlaceItem
+import com.ewida.skysense.util.enums.WeatherUnit
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -66,6 +67,7 @@ fun SavedPlacesScreen(
     ) {
         SavedPlacesScreenContent(
             places = savedPlaces.value,
+            unit = viewModel.getUnit(),
             userLocationLatitude = userLocationLatitude,
             userLocationLongitude = userLocationLongitude,
             onPlaceClicked = { details ->
@@ -79,6 +81,7 @@ fun SavedPlacesScreen(
 @Composable
 private fun SavedPlacesScreenContent(
     places: List<WeatherDetails>,
+    unit: WeatherUnit,
     userLocationLatitude: Double,
     userLocationLongitude: Double,
     onPlaceClicked: (WeatherDetails) -> Unit,
@@ -118,6 +121,7 @@ private fun SavedPlacesScreenContent(
 
                         SavedPlaceItem(
                             placeDetails = it,
+                            unit = unit,
                             onPlaceClicked = onPlaceClicked
                         )
 
@@ -139,6 +143,7 @@ private fun SavedPlacesScreenContent(
                 ) { placeDetails ->
                     SavedPlaceItem(
                         placeDetails = placeDetails,
+                        unit = unit,
                         onPlaceClicked = onPlaceClicked
                     )
                 }

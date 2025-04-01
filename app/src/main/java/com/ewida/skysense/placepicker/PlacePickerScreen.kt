@@ -31,7 +31,7 @@ import com.ewida.skysense.placepicker.components.PickingMap
 import com.ewida.skysense.placepicker.components.PlacesSearchBar
 import com.ewida.skysense.placepicker.components.SaveButton
 import com.ewida.skysense.util.ActionResult
-import com.ewida.skysense.util.location.LocationUtils
+import com.ewida.skysense.util.LocationUtils
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.AutocompletePrediction

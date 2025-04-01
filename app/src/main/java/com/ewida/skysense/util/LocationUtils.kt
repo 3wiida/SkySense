@@ -1,16 +1,16 @@
-package com.ewida.skysense.util.location
+package com.ewida.skysense.util
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
-import android.os.Build
 import android.os.Looper
 import com.google.android.gms.location.LocationListener
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
+import java.util.Locale
 
 object LocationUtils {
 
@@ -41,7 +41,7 @@ object LocationUtils {
         longitude: Double,
     ): Address? {
         return try {
-            val addresses = Geocoder(context).getFromLocation(
+            val addresses = Geocoder(context, Locale.getDefault()).getFromLocation(
                 latitude,
                 longitude,
                 1

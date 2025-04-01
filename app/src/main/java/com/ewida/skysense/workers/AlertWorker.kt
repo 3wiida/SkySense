@@ -6,42 +6,13 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.PixelFormat
 import android.media.MediaPlayer
-import android.os.Build
-import android.os.Looper
-import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.WindowManager
 import android.widget.Button
-import android.widget.FrameLayout
 import android.widget.TextView
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Card
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LifecycleRegistry
-import androidx.lifecycle.setViewTreeLifecycleOwner
 import androidx.work.CoroutineWorker
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
@@ -53,14 +24,14 @@ import com.ewida.skysense.data.model.WeatherDetails
 import com.ewida.skysense.data.sources.remote.api.ApiClient
 import com.ewida.skysense.util.Constants
 import com.ewida.skysense.util.enums.AlertType
-import com.ewida.skysense.util.location.LocationUtils
+import com.ewida.skysense.util.LocationUtils
 import com.ewida.skysense.data.repository.WeatherRepositoryImpl
 import com.ewida.skysense.data.sources.local.LocalDataSourceImpl
 import com.ewida.skysense.data.sources.local.db.WeatherDatabase
 import com.ewida.skysense.data.sources.local.preferences.AppPreferencesImpl
 import com.ewida.skysense.data.sources.remote.RemoteDataSourceImpl
+import com.ewida.skysense.util.enums.AppLanguage
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
@@ -90,7 +61,11 @@ class AlertWorker(
 
         val cityName = LocationUtils.getLocationAddressLine(context, lat, long)?.subAdminArea
             ?: "Unknown Location"
-        val weatherDetails = repo.getRemoteWeatherDetails(lat, long)
+        val weatherDetails = repo.getRemoteWeatherDetails(
+            latitude = lat,
+            longitude = long,
+            lang = getLanguage()
+        )
 
         when (type) {
             AlertType.NOTIFICATION.name -> {
@@ -217,6 +192,13 @@ class AlertWorker(
             }
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    private fun getLanguage(): String {
+        return when (repo.getAppSettings().language) {
+            AppLanguage.ENGLISH -> "en"
+            AppLanguage.ARABIC -> "ar"
         }
     }
 

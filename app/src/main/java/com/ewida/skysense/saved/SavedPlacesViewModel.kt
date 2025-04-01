@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.ewida.skysense.data.model.WeatherDetails
 import com.ewida.skysense.data.repository.WeatherRepository
+import com.ewida.skysense.util.enums.WeatherUnit
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -23,6 +24,10 @@ class SavedPlacesViewModel(private val repo: WeatherRepository) : ViewModel() {
                 _savedPlaces.emit(response)
             }
         }
+    }
+
+    fun getUnit(): WeatherUnit {
+        return repo.getAppSettings().unit
     }
 
     @Suppress("UNCHECKED_CAST")
