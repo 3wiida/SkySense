@@ -5,7 +5,8 @@ import com.ewida.skysense.data.model.WeatherAlert
 import com.ewida.skysense.data.model.WeatherDetails
 import com.ewida.skysense.data.sources.local.LocalDataSource
 import com.ewida.skysense.data.sources.remote.RemoteDataSource
-import com.ewida.skysense.util.enums.AppLanguages
+import com.ewida.skysense.util.enums.AppLanguage
+import com.ewida.skysense.util.enums.WeatherUnit
 import com.google.android.gms.tasks.Task
 import com.google.android.libraries.places.api.net.FetchPlaceResponse
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
@@ -92,8 +93,12 @@ class WeatherRepositoryImpl private constructor(
         return localDataSource.getAppSettings()
     }
 
-    override fun saveAppLanguage(language: AppLanguages) {
+    override fun saveAppLanguage(language: AppLanguage) {
         localDataSource.saveAppLanguage(language)
+    }
+
+    override fun saveWeatherUnit(unit: WeatherUnit) {
+        localDataSource.saveWeatherUnit(unit)
     }
 
     companion object {

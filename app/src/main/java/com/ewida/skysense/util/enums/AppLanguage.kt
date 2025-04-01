@@ -1,6 +1,6 @@
 package com.ewida.skysense.util.enums
 
-enum class AppLanguages {
+enum class AppLanguage {
     ENGLISH,
     ARABIC
 }

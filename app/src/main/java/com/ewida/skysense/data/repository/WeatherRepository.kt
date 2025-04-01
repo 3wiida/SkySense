@@ -3,7 +3,8 @@ package com.ewida.skysense.data.repository
 import com.ewida.skysense.data.model.AppSettings
 import com.ewida.skysense.data.model.WeatherAlert
 import com.ewida.skysense.data.model.WeatherDetails
-import com.ewida.skysense.util.enums.AppLanguages
+import com.ewida.skysense.util.enums.AppLanguage
+import com.ewida.skysense.util.enums.WeatherUnit
 import com.google.android.gms.tasks.Task
 import com.google.android.libraries.places.api.net.FetchPlaceResponse
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
@@ -45,5 +46,7 @@ interface WeatherRepository {
 
     fun getAppSettings(): AppSettings
 
-    fun saveAppLanguage(language: AppLanguages)
+    fun saveAppLanguage(language: AppLanguage)
+
+    fun saveWeatherUnit(unit: WeatherUnit)
 }

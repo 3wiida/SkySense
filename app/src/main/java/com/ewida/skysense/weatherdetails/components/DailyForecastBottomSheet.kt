@@ -27,6 +27,7 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.ewida.skysense.R
 import com.ewida.skysense.data.model.Daily
 import com.ewida.skysense.util.Constants
+import com.ewida.skysense.util.enums.WeatherUnit
 import com.ewida.skysense.util.formatTemperature
 import com.ewida.skysense.util.formatToDefaultLocale
 
@@ -34,7 +35,8 @@ import com.ewida.skysense.util.formatToDefaultLocale
 @Composable
 fun DailyForecastBottomSheet(
     forecast: List<Daily>,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    unit: WeatherUnit
 ) {
     ModalBottomSheet(
         sheetState = rememberModalBottomSheetState(),
@@ -62,7 +64,7 @@ fun DailyForecastBottomSheet(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(items = forecast) { dayForecast ->
-                    SingleDayForecast(dayForecast = dayForecast)
+                    SingleDayForecast(dayForecast = dayForecast, unit = unit)
                 }
             }
         }
@@ -71,7 +73,7 @@ fun DailyForecastBottomSheet(
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-private fun SingleDayForecast(dayForecast: Daily) {
+private fun SingleDayForecast(dayForecast: Daily,unit: WeatherUnit) {
     Column(
         modifier = Modifier
             .width(120.dp)
@@ -110,7 +112,7 @@ private fun SingleDayForecast(dayForecast: Daily) {
         Text(
             text = stringResource(
                 R.string.h_c,
-                dayForecast.temp.max.toInt().formatTemperature("C")
+                dayForecast.temp.max.toInt().formatTemperature(unit)
             ),
             fontWeight = if(dayForecast.isToday()) FontWeight.Bold else FontWeight.Normal
         )
@@ -118,7 +120,7 @@ private fun SingleDayForecast(dayForecast: Daily) {
         Text(
             text = stringResource(
                 R.string.l_c,
-                dayForecast.temp.min.toInt().formatTemperature("C")
+                dayForecast.temp.min.toInt().formatTemperature(unit)
             ),
             fontWeight = if(dayForecast.isToday()) FontWeight.Bold else FontWeight.Normal
         )

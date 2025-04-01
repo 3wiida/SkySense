@@ -6,7 +6,8 @@ import com.ewida.skysense.data.model.AppSettings
 import com.ewida.skysense.data.model.ErrorModel
 import com.ewida.skysense.data.repository.WeatherRepository
 import com.ewida.skysense.util.Result
-import com.ewida.skysense.util.enums.AppLanguages
+import com.ewida.skysense.util.enums.AppLanguage
+import com.ewida.skysense.util.enums.WeatherUnit
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -27,8 +28,12 @@ class SettingsViewModel(private val repo: WeatherRepository) : ViewModel() {
         }
     }
 
-    fun updateLanguage(language: AppLanguages) {
+    fun updateLanguage(language: AppLanguage) {
         repo.saveAppLanguage(language)
+    }
+
+    fun updateUnit(unit: WeatherUnit) {
+        repo.saveWeatherUnit(unit)
     }
 
     @Suppress("UNCHECKED_CAST")

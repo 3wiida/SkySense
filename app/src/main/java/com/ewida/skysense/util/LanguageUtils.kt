@@ -7,14 +7,14 @@ import android.content.res.Configuration
 import android.os.Build
 import android.os.LocaleList
 import androidx.annotation.RequiresApi
-import com.ewida.skysense.util.enums.AppLanguages
+import com.ewida.skysense.util.enums.AppLanguage
 import java.util.Locale
 
 object LanguageUtils {
-    fun changeLanguage(activity: Activity, language: AppLanguages) {
+    fun changeLanguage(activity: Activity, language: AppLanguage) {
         val languageCode = when (language) {
-            AppLanguages.ENGLISH -> "en"
-            AppLanguages.ARABIC -> "ar"
+            AppLanguage.ENGLISH -> "en"
+            AppLanguage.ARABIC -> "ar"
         }
 
         val locale = Locale(languageCode)

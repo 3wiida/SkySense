@@ -69,4 +69,6 @@
     <string name="l_c">ص: %1$s</string>
     <string name="notificationn">إشعار</string>
     <string name="hours_forecast">توقعات %1$s ساعة</string>
+    <string name="units">Units</string>
+    <string name="standard">Standard</string>
 </resources>

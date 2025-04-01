@@ -7,5 +7,6 @@ object Constants {
     object SharedPreferences {
         const val SETTINGS_PREFERENCES_NAME = "APP_SETTINGS_PREFS"
         const val LANGUAGE_PREFERENCES_KEY = "LANGUAGE_PREFERENCES_KEY"
+        const val UNIT_PREFERENCES_KEY = "UNIT_PREFERENCES_KEY"
     }
 }

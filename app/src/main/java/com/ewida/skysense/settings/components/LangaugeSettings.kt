@@ -22,12 +22,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.ewida.skysense.R
-import com.ewida.skysense.util.enums.AppLanguages
+import com.ewida.skysense.util.enums.AppLanguage
 
 @Composable
 fun LanguageSettings(
-    language: AppLanguages,
-    onLanguageChanged: (AppLanguages) -> Unit
+    language: AppLanguage,
+    onLanguageChanged: (AppLanguage) -> Unit
 ) {
     var selectedLanguage by remember { mutableStateOf(language) }
 
@@ -58,11 +58,11 @@ fun LanguageSettings(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 RadioButton(
-                    selected = selectedLanguage == AppLanguages.ENGLISH,
+                    selected = selectedLanguage == AppLanguage.ENGLISH,
                     onClick = {
-                        if(selectedLanguage != AppLanguages.ENGLISH){
-                            onLanguageChanged(AppLanguages.ENGLISH)
-                            selectedLanguage = AppLanguages.ENGLISH
+                        if(selectedLanguage != AppLanguage.ENGLISH){
+                            selectedLanguage = AppLanguage.ENGLISH
+                            onLanguageChanged(AppLanguage.ENGLISH)
                         }
                     }
                 )
@@ -73,11 +73,11 @@ fun LanguageSettings(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 RadioButton(
-                    selected = selectedLanguage == AppLanguages.ARABIC,
+                    selected = selectedLanguage == AppLanguage.ARABIC,
                     onClick = {
-                        if(selectedLanguage != AppLanguages.ARABIC){
-                            onLanguageChanged(AppLanguages.ARABIC)
-                            selectedLanguage = AppLanguages.ARABIC
+                        if(selectedLanguage != AppLanguage.ARABIC){
+                            selectedLanguage = AppLanguage.ARABIC
+                            onLanguageChanged(AppLanguage.ARABIC)
                         }
                     }
                 )

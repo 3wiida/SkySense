@@ -24,12 +24,14 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.ewida.skysense.R
 import com.ewida.skysense.data.model.Hourly
 import com.ewida.skysense.util.Constants
+import com.ewida.skysense.util.enums.WeatherUnit
 import com.ewida.skysense.util.formatTemperature
 import com.ewida.skysense.util.formatToDefaultLocale
 
 @Composable
 fun HourlyTempSection(
-    hourlyTemps: List<Hourly>
+    hourlyTemps: List<Hourly>,
+    unit: WeatherUnit
 ) {
     Column(
         modifier = Modifier
@@ -49,7 +51,7 @@ fun HourlyTempSection(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(items = hourlyTemps) { hourlyItem ->
-                HourlySingleItem(hourlyItem = hourlyItem)
+                HourlySingleItem(hourlyItem = hourlyItem, unit = unit)
             }
         }
     }
@@ -58,7 +60,8 @@ fun HourlyTempSection(
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 private fun HourlySingleItem(
-    hourlyItem: Hourly
+    hourlyItem: Hourly,
+    unit: WeatherUnit
 ) {
     Column(
         modifier = Modifier
@@ -81,7 +84,7 @@ private fun HourlySingleItem(
         )
 
         Text(
-            text = hourlyItem.temp.toInt().formatTemperature("C"),
+            text = hourlyItem.temp.toInt().formatTemperature(unit),
         )
     }
 }

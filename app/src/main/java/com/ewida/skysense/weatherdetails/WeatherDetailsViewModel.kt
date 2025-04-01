@@ -7,7 +7,8 @@ import com.ewida.skysense.data.model.ErrorModel
 import com.ewida.skysense.data.model.WeatherDetails
 import com.ewida.skysense.data.repository.WeatherRepository
 import com.ewida.skysense.util.Result
-import com.ewida.skysense.util.enums.AppLanguages
+import com.ewida.skysense.util.enums.AppLanguage
+import com.ewida.skysense.util.enums.WeatherUnit
 import com.ewida.skysense.util.network.getError
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -49,9 +50,13 @@ class WeatherDetailsViewModel(private val repo: WeatherRepository) : ViewModel()
 
     private fun getLanguage(): String {
         return when (repo.getAppSettings().language) {
-            AppLanguages.ENGLISH -> "en"
-            AppLanguages.ARABIC -> "ar"
+            AppLanguage.ENGLISH -> "en"
+            AppLanguage.ARABIC -> "ar"
         }
+    }
+
+    fun getUnit(): WeatherUnit {
+        return repo.getAppSettings().unit
     }
 
 

@@ -29,6 +29,7 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.ewida.skysense.R
 import com.ewida.skysense.data.model.Current
 import com.ewida.skysense.util.Constants
+import com.ewida.skysense.util.enums.WeatherUnit
 import com.ewida.skysense.util.formatTemperature
 import com.ewida.skysense.util.formatToDefaultLocale
 import java.time.Instant
@@ -38,6 +39,7 @@ import java.time.Instant
 fun CurrentWeatherSection(
     current: Current,
     addressLine: String,
+    unit: WeatherUnit
 ) {
     Box(
         modifier = Modifier
@@ -94,7 +96,7 @@ fun CurrentWeatherSection(
                 horizontalAlignment = Alignment.End,
             ) {
                 Text(
-                    text = current.temp.toInt().formatTemperature("C"),
+                    text = current.temp.toInt().formatTemperature(unit),
                     style = MaterialTheme.typography.headlineLarge,
                     fontSize = 56.sp,
                     color = MaterialTheme.colorScheme.onPrimary

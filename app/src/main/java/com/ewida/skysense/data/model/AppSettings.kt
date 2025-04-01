@@ -1,7 +1,9 @@
 package com.ewida.skysense.data.model
 
-import com.ewida.skysense.util.enums.AppLanguages
+import com.ewida.skysense.util.enums.AppLanguage
+import com.ewida.skysense.util.enums.WeatherUnit
 
 data class AppSettings(
-    val language: AppLanguages = AppLanguages.ENGLISH
+    val language: AppLanguage = AppLanguage.ENGLISH,
+    val unit: WeatherUnit = WeatherUnit.METRIC
 )

@@ -29,6 +29,7 @@ import com.ewida.skysense.R
 import com.ewida.skysense.data.model.WeatherDetails
 import com.ewida.skysense.util.location.LocationUtils
 import com.ewida.skysense.util.Result
+import com.ewida.skysense.util.enums.WeatherUnit
 import com.ewida.skysense.util.roundTo
 import com.ewida.skysense.weatherdetails.components.AppTopBar
 import com.ewida.skysense.weatherdetails.components.CurrentWeatherSection
@@ -77,6 +78,7 @@ fun WeatherDetailsScreen(
     ) {
         WeatherDetailsScreenContent(
             detailsResponse = detailsResponse.value,
+            unit = viewModel.getUnit(),
             addressLine = addressLine,
             onShowDaysForecast = {
                 isDaysForecastBottomSheetShown = !isDaysForecastBottomSheetShown
@@ -97,6 +99,7 @@ fun WeatherDetailsScreen(
     if (isDaysForecastBottomSheetShown) {
         DailyForecastBottomSheet(
             forecast = (detailsResponse.value as Result.Success).data.daily,
+            unit = viewModel.getUnit(),
             onDismiss = {
                 isDaysForecastBottomSheetShown = !isDaysForecastBottomSheetShown
             }
@@ -141,6 +144,7 @@ fun WeatherDetailsScreen(
 private fun WeatherDetailsScreenContent(
     modifier: Modifier = Modifier,
     detailsResponse: Result<WeatherDetails>,
+    unit: WeatherUnit,
     addressLine: String,
     onShowDaysForecast: () -> Unit,
     onFailureRetryClicked: () -> Unit
@@ -162,6 +166,7 @@ private fun WeatherDetailsScreenContent(
                 WeatherDetailsUI(
                     modifier = modifier,
                     details = it as WeatherDetails,
+                    unit = unit,
                     addressLine = addressLine,
                     onShowDaysForecast = onShowDaysForecast
                 )
@@ -174,6 +179,7 @@ private fun WeatherDetailsScreenContent(
 private fun WeatherDetailsUI(
     modifier: Modifier = Modifier,
     details: WeatherDetails,
+    unit: WeatherUnit,
     addressLine: String,
     onShowDaysForecast: () -> Unit
 ) {
@@ -184,13 +190,15 @@ private fun WeatherDetailsUI(
     ) {
         CurrentWeatherSection(
             current = details.current,
+            unit = unit,
             addressLine = addressLine
         )
 
         Spacer(Modifier.height(16.dp))
 
         HourlyTempSection(
-            hourlyTemps = details.hourly.take(24)
+            hourlyTemps = details.hourly.take(24),
+            unit = unit
         )
 
         Button(

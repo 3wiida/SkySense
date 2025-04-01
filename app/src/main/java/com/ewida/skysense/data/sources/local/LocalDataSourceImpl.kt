@@ -5,7 +5,8 @@ import com.ewida.skysense.data.model.WeatherAlert
 import com.ewida.skysense.data.model.WeatherDetails
 import com.ewida.skysense.data.sources.local.db.WeatherDao
 import com.ewida.skysense.data.sources.local.preferences.AppPreferences
-import com.ewida.skysense.util.enums.AppLanguages
+import com.ewida.skysense.util.enums.AppLanguage
+import com.ewida.skysense.util.enums.WeatherUnit
 import kotlinx.coroutines.flow.Flow
 
 class LocalDataSourceImpl(
@@ -47,7 +48,11 @@ class LocalDataSourceImpl(
         return preferences.getAppSettings()
     }
 
-    override fun saveAppLanguage(language: AppLanguages) {
-        return preferences.saveAppLanguage(language)
+    override fun saveAppLanguage(language: AppLanguage) {
+        preferences.saveAppLanguage(language)
+    }
+
+    override fun saveWeatherUnit(unit: WeatherUnit) {
+        preferences.saveWeatherUnit(unit)
     }
 }

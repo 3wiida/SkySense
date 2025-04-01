@@ -16,9 +16,11 @@ import com.ewida.skysense.R
 import com.ewida.skysense.common.ScreenHeader
 import com.ewida.skysense.data.model.AppSettings
 import com.ewida.skysense.settings.components.LanguageSettings
+import com.ewida.skysense.settings.components.UnitSection
 import com.ewida.skysense.util.LanguageUtils
 import com.ewida.skysense.util.Result
-import com.ewida.skysense.util.enums.AppLanguages
+import com.ewida.skysense.util.enums.AppLanguage
+import com.ewida.skysense.util.enums.WeatherUnit
 
 @Composable
 fun SettingsScreen(
@@ -28,12 +30,11 @@ fun SettingsScreen(
     val activity = LocalActivity.current
     val settingsResult = viewModel.settings.collectAsStateWithLifecycle()
 
-    when(val result = settingsResult.value){
+    when (val result = settingsResult.value) {
         is Result.Loading -> {}
         is Result.Success<AppSettings> -> {
             SettingsScreenContent(
-                selectedLanguage = result.data.language,
-                onBackClicked = onNavigateUp,
+                settings = result.data,
                 onLanguageChanged = { language ->
                     viewModel.updateLanguage(language)
                     activity?.let {
@@ -42,9 +43,12 @@ fun SettingsScreen(
                             language = language
                         )
                     }
-                }
+                },
+                onUnitChanged = viewModel::updateUnit,
+                onBackClicked = onNavigateUp
             )
         }
+
         is Result.Failure -> {}
     }
 
@@ -52,9 +56,10 @@ fun SettingsScreen(
 
 @Composable
 private fun SettingsScreenContent(
-    selectedLanguage: AppLanguages,
+    settings: AppSettings,
     onBackClicked: () -> Unit,
-    onLanguageChanged: (AppLanguages) -> Unit
+    onLanguageChanged: (AppLanguage) -> Unit,
+    onUnitChanged: (WeatherUnit) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -69,8 +74,13 @@ private fun SettingsScreenContent(
         )
 
         LanguageSettings(
-            language = selectedLanguage,
+            language = settings.language,
             onLanguageChanged = onLanguageChanged
+        )
+
+        UnitSection(
+            unit = settings.unit,
+            onUnitChanged = onUnitChanged
         )
     }
 }

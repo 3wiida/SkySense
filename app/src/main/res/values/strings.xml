@@ -68,4 +68,7 @@
     <string name="l_c">L: %1$s</string>
     <string name="notificationn">Notification</string>
     <string name="hours_forecast">%1$s Hours Forecast</string>
+    <string name="units">Units</string>
+    <string name="metric">Metric</string>
+    <string name="standard">Standard</string>
 </resources>
