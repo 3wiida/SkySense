@@ -6,7 +6,9 @@ import com.ewida.skysense.data.model.WeatherDetails
 import com.ewida.skysense.data.sources.local.LocalDataSource
 import com.ewida.skysense.data.sources.remote.RemoteDataSource
 import com.ewida.skysense.util.enums.AppLanguage
+import com.ewida.skysense.util.enums.LocationType
 import com.ewida.skysense.util.enums.WeatherUnit
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
 import com.google.android.libraries.places.api.net.FetchPlaceResponse
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
@@ -100,6 +102,18 @@ class WeatherRepositoryImpl private constructor(
 
     override fun saveWeatherUnit(unit: WeatherUnit) {
         localDataSource.saveWeatherUnit(unit)
+    }
+
+    override fun saveLocationType(type: LocationType) {
+        localDataSource.saveLocationType(type)
+    }
+
+    override fun saveMapLocation(place: LatLng) {
+        localDataSource.saveMapLocation(place)
+    }
+
+    override fun getMapLocation(): Pair<Double, Double> {
+        return localDataSource.getMapLocation()
     }
 
     companion object {

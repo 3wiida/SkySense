@@ -7,6 +7,7 @@ import com.ewida.skysense.data.model.ErrorModel
 import com.ewida.skysense.data.repository.WeatherRepository
 import com.ewida.skysense.util.Result
 import com.ewida.skysense.util.enums.AppLanguage
+import com.ewida.skysense.util.enums.LocationType
 import com.ewida.skysense.util.enums.WeatherUnit
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -34,6 +35,10 @@ class SettingsViewModel(private val repo: WeatherRepository) : ViewModel() {
 
     fun updateUnit(unit: WeatherUnit) {
         repo.saveWeatherUnit(unit)
+    }
+
+    fun updateLocationType(locationType: LocationType){
+        repo.saveLocationType(locationType)
     }
 
     @Suppress("UNCHECKED_CAST")

@@ -75,4 +75,7 @@
     <string name="temperature_by_celsius_and_wind_speed_by_meter_sec">Temperature by Celsius and Wind Speed by meter/sec</string>
     <string name="temperature_by_kelvin_and_wind_speed_by_meter_sec">Temperature by Kelvin and Wind Speed by meter/sec</string>
     <string name="temperature_by_fahrenheit_and_wind_speed_by_miles_hour">Temperature by Fahrenheit and Wind Speed by miles/hour</string>
+    <string name="location">Location</string>
+    <string name="gps">GPS</string>
+    <string name="map">Map</string>
 </resources>

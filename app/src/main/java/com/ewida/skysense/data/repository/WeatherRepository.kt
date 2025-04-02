@@ -4,7 +4,9 @@ import com.ewida.skysense.data.model.AppSettings
 import com.ewida.skysense.data.model.WeatherAlert
 import com.ewida.skysense.data.model.WeatherDetails
 import com.ewida.skysense.util.enums.AppLanguage
+import com.ewida.skysense.util.enums.LocationType
 import com.ewida.skysense.util.enums.WeatherUnit
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
 import com.google.android.libraries.places.api.net.FetchPlaceResponse
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
@@ -50,4 +52,10 @@ interface WeatherRepository {
     fun saveAppLanguage(language: AppLanguage)
 
     fun saveWeatherUnit(unit: WeatherUnit)
+
+    fun saveLocationType(type: LocationType)
+
+    fun saveMapLocation(place: LatLng)
+
+    fun getMapLocation(): Pair<Double, Double>
 }

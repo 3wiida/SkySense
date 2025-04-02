@@ -29,6 +29,7 @@ import com.ewida.skysense.saved.SavedPlacesViewModel
 import com.ewida.skysense.settings.SettingsScreen
 import com.ewida.skysense.settings.SettingsViewModel
 import com.ewida.skysense.util.Constants
+import com.ewida.skysense.util.enums.SourceScreen
 import com.ewida.skysense.weatherdetails.WeatherDetailsScreen
 import com.ewida.skysense.weatherdetails.WeatherDetailsViewModel
 import com.ewida.skysense.weatherdetails.WeatherDetailsViewModel.WeatherDetailsViewModelFactory
@@ -94,8 +95,13 @@ fun AppNavHost(
                         )
                     )
                 },
-                onNavigateToSettings = {
-                    navHostController.navigate(Screens.Settings)
+                onNavigateToSettings = {lat, long ->
+                    navHostController.navigate(
+                        Screens.Settings(
+                            currentLocationLat = lat ?: 0.0,
+                            currentLocationLong = long ?: 0.0
+                        )
+                    )
                 }
             )
         }
@@ -114,7 +120,8 @@ fun AppNavHost(
                     navHostController.navigate(
                         Screens.PlacePicker(
                             initialLat = data.currentLocationLat,
-                            initialLong = data.currentLocationLong
+                            initialLong = data.currentLocationLong,
+                            source = SourceScreen.SAVED
                         )
                     )
                 },
@@ -141,6 +148,7 @@ fun AppNavHost(
             PlacePickerScreen(
                 initialLat = data.initialLat,
                 initialLong = data.initialLong,
+                source = data.source,
                 viewModel = viewModel(
                     factory = PlacePickerViewModel.PlacePickerViewModelFactory(
                         repository = repository,
@@ -185,11 +193,21 @@ fun AppNavHost(
             )
         }
 
-        composable<Screens.Settings> {
+        composable<Screens.Settings> { navBackStackEntry ->
+            val data = navBackStackEntry.toRoute<Screens.Settings>()
             SettingsScreen(
                 viewModel = viewModel(
                     factory = SettingsViewModel.SettingsViewModelFactory(repository = repository)
                 ),
+                onNavigateToPlacePicker = {
+                    navHostController.navigate(
+                        Screens.PlacePicker(
+                            initialLat = data.currentLocationLat,
+                            initialLong = data.currentLocationLong,
+                            source = SourceScreen.SETTINGS
+                        )
+                    )
+                },
                 onNavigateUp = {
                     navHostController.navigateUp()
                 }

@@ -8,6 +8,7 @@ import com.ewida.skysense.data.model.WeatherDetails
 import com.ewida.skysense.data.repository.WeatherRepository
 import com.ewida.skysense.util.Result
 import com.ewida.skysense.util.enums.AppLanguage
+import com.ewida.skysense.util.enums.LocationType
 import com.ewida.skysense.util.enums.WeatherUnit
 import com.ewida.skysense.util.getError
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -57,6 +58,14 @@ class WeatherDetailsViewModel(private val repo: WeatherRepository) : ViewModel()
 
     fun getUnit(): WeatherUnit {
         return repo.getAppSettings().unit
+    }
+
+    fun getLocationType(): LocationType {
+        return repo.getAppSettings().locationType
+    }
+
+    fun getMapLocation(): Pair<Double, Double> {
+        return repo.getMapLocation()
     }
 
 

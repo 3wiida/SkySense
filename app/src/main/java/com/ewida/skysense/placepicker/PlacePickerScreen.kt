@@ -32,6 +32,7 @@ import com.ewida.skysense.placepicker.components.PlacesSearchBar
 import com.ewida.skysense.placepicker.components.SaveButton
 import com.ewida.skysense.util.ActionResult
 import com.ewida.skysense.util.LocationUtils
+import com.ewida.skysense.util.enums.SourceScreen
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.AutocompletePrediction
@@ -50,6 +51,7 @@ fun PlacePickerScreen(
     viewModel: PlacePickerViewModel,
     initialLat: Double,
     initialLong: Double,
+    source: SourceScreen,
     onNavigateUp: () -> Unit
 ) {
     val context = LocalContext.current
@@ -78,7 +80,12 @@ fun PlacePickerScreen(
         predictions = predictions.value,
         onSearchQueryChanged = viewModel::onSearchQueryChanged,
         onPredictionSelected = viewModel::onPredictionSelected,
-        onSaveClicked = { viewModel.onSaveClicked(place = markerState.position) }
+        onSaveClicked = {
+            viewModel.onSaveClicked(
+                place = markerState.position,
+                sourceScreen = source
+            )
+        }
     )
 
     LaunchedEffect(key1 = selectedPredictionLatLng.value) {

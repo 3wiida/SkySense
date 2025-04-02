@@ -76,4 +76,7 @@
     <string name="temperature_by_celsius_and_wind_speed_by_meter_sec">درجة الحرارة بالسيلسيوس وسرعة الرياح بالمتر/ثانية</string>
     <string name="temperature_by_kelvin_and_wind_speed_by_meter_sec">درجة الحرارة بالكلفن وسرعة الرياح بالمتر/ثانية</string>
     <string name="temperature_by_fahrenheit_and_wind_speed_by_miles_hour">درجة الحرارة بالفهرنهايت وسرعة الرياح بالأميال/ساعة</string>
+    <string name="location">الموقع</string>
+    <string name="gps">نظام تحديد المواقع (GPS)</string>
+    <string name="map">الخريطة</string>
 </resources>

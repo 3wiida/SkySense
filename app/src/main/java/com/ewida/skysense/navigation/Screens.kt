@@ -1,5 +1,6 @@
 package com.ewida.skysense.navigation
 
+import com.ewida.skysense.util.enums.SourceScreen
 import kotlinx.serialization.Serializable
 
 sealed class Screens {
@@ -21,7 +22,8 @@ sealed class Screens {
     @Serializable
     data class PlacePicker(
         val initialLat: Double,
-        val initialLong: Double
+        val initialLong: Double,
+        val source: SourceScreen
     ) : Screens()
 
     @Serializable
@@ -37,5 +39,8 @@ sealed class Screens {
     ) : Screens()
 
     @Serializable
-    data object Settings
+    data class Settings(
+        val currentLocationLat: Double,
+        val currentLocationLong: Double
+    ) : Screens()
 }

@@ -29,6 +29,7 @@ import com.ewida.skysense.R
 import com.ewida.skysense.data.model.WeatherDetails
 import com.ewida.skysense.util.LocationUtils
 import com.ewida.skysense.util.Result
+import com.ewida.skysense.util.enums.LocationType
 import com.ewida.skysense.util.enums.WeatherUnit
 import com.ewida.skysense.util.roundTo
 import com.ewida.skysense.weatherdetails.components.AppTopBar
@@ -47,7 +48,7 @@ fun WeatherDetailsScreen(
     locationLong: Double?,
     onNavigateToSavedPlaces: (Double?, Double?) -> Unit,
     onNavigateToAlerts: (Double?, Double?) -> Unit,
-    onNavigateToSettings: () -> Unit
+    onNavigateToSettings: (Double?, Double?) -> Unit
 ) {
     val detailsResponse = viewModel.detailsResponse.collectAsStateWithLifecycle()
 
@@ -72,7 +73,12 @@ fun WeatherDetailsScreen(
                         currentLocation?.longitude?.roundTo(2)
                     )
                 },
-                onSettingsClicked = onNavigateToSettings
+                onSettingsClicked = {
+                    onNavigateToSettings(
+                        currentLocation?.latitude?.roundTo(2),
+                        currentLocation?.longitude?.roundTo(2)
+                    )
+                }
             )
         }
     ) {
@@ -107,6 +113,7 @@ fun WeatherDetailsScreen(
     }
 
     LaunchedEffect(Unit) {
+        //When coming from saved item or notification
         locationLat?.let {
             viewModel.getWeatherDetails(
                 latitude = locationLat.roundTo(2),
@@ -119,23 +126,44 @@ fun WeatherDetailsScreen(
             )?.subAdminArea ?: context.getString(R.string.unknown_location)
         }
 
-        LocationUtils.getCurrentLocation(
-            context = context,
-            onLocationAvailable = { location ->
-                if (locationLat == null) {
-                    viewModel.getWeatherDetails(
-                        latitude = location.latitude.roundTo(2),
-                        longitude = location.longitude.roundTo(2)
-                    )
+        when (viewModel.getLocationType()) {
+            LocationType.GPS -> {
+                LocationUtils.getCurrentLocation(
+                    context = context,
+                    onLocationAvailable = { location ->
+                        if (locationLat == null) {
+                            viewModel.getWeatherDetails(
+                                latitude = location.latitude.roundTo(2),
+                                longitude = location.longitude.roundTo(2)
+                            )
+                            addressLine = LocationUtils.getLocationAddressLine(
+                                context,
+                                location.latitude,
+                                location.longitude
+                            )?.subAdminArea ?: context.getString(R.string.unknown_location)
+                        }
+                        currentLocation = location
+                    }
+                )
+            }
+
+            LocationType.MAP -> {
+                val (lat, long) = viewModel.getMapLocation()
+                if (locationLat == null){
+                    viewModel.getWeatherDetails(lat, long)
                     addressLine = LocationUtils.getLocationAddressLine(
                         context,
-                        location.latitude,
-                        location.longitude
+                        lat,
+                        long
                     )?.subAdminArea ?: context.getString(R.string.unknown_location)
+                    currentLocation = Location("").apply {
+                        latitude = lat
+                        longitude = long
+                    }
                 }
-                currentLocation = location
             }
-        )
+        }
+
     }
 
 }

@@ -6,7 +6,9 @@ import com.ewida.skysense.data.model.WeatherDetails
 import com.ewida.skysense.data.sources.local.db.WeatherDao
 import com.ewida.skysense.data.sources.local.preferences.AppPreferences
 import com.ewida.skysense.util.enums.AppLanguage
+import com.ewida.skysense.util.enums.LocationType
 import com.ewida.skysense.util.enums.WeatherUnit
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.flow.Flow
 
 class LocalDataSourceImpl(
@@ -54,5 +56,17 @@ class LocalDataSourceImpl(
 
     override fun saveWeatherUnit(unit: WeatherUnit) {
         preferences.saveWeatherUnit(unit)
+    }
+
+    override fun saveLocationType(type: LocationType) {
+        preferences.saveLocationType(type)
+    }
+
+    override fun saveMapLocation(place: LatLng) {
+        preferences.saveMapLocation(place)
+    }
+
+    override fun getMapLocation(): Pair<Double, Double> {
+        return preferences.getMapLocation()
     }
 }

@@ -16,15 +16,18 @@ import com.ewida.skysense.R
 import com.ewida.skysense.common.ScreenHeader
 import com.ewida.skysense.data.model.AppSettings
 import com.ewida.skysense.settings.components.LanguageSettings
+import com.ewida.skysense.settings.components.LocationSettings
 import com.ewida.skysense.settings.components.UnitSection
 import com.ewida.skysense.util.LanguageUtils
 import com.ewida.skysense.util.Result
 import com.ewida.skysense.util.enums.AppLanguage
+import com.ewida.skysense.util.enums.LocationType
 import com.ewida.skysense.util.enums.WeatherUnit
 
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel,
+    onNavigateToPlacePicker: () -> Unit,
     onNavigateUp: () -> Unit
 ) {
     val activity = LocalActivity.current
@@ -45,6 +48,17 @@ fun SettingsScreen(
                     }
                 },
                 onUnitChanged = viewModel::updateUnit,
+                onLocationTypeChanged = { locationType ->
+                    when(locationType){
+                        LocationType.GPS -> {
+                            viewModel.updateLocationType(locationType)
+                        }
+                        LocationType.MAP -> {
+                            viewModel.updateLocationType(locationType)
+                            onNavigateToPlacePicker()
+                        }
+                    }
+                },
                 onBackClicked = onNavigateUp
             )
         }
@@ -59,7 +73,8 @@ private fun SettingsScreenContent(
     settings: AppSettings,
     onBackClicked: () -> Unit,
     onLanguageChanged: (AppLanguage) -> Unit,
-    onUnitChanged: (WeatherUnit) -> Unit
+    onUnitChanged: (WeatherUnit) -> Unit,
+    onLocationTypeChanged: (LocationType) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -81,6 +96,11 @@ private fun SettingsScreenContent(
         UnitSection(
             unit = settings.unit,
             onUnitChanged = onUnitChanged
+        )
+
+        LocationSettings(
+            preferredLocation = settings.locationType,
+            onLocationTypeChanged = onLocationTypeChanged
         )
     }
 }

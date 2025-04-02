@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.ewida.skysense.data.repository.WeatherRepository
 import com.ewida.skysense.util.ActionResult
 import com.ewida.skysense.util.enums.AppLanguage
+import com.ewida.skysense.util.enums.SourceScreen
 import com.ewida.skysense.util.roundTo
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.AutocompletePrediction
@@ -66,7 +67,15 @@ class PlacePickerViewModel(
         }
     }
 
-    fun onSaveClicked(place: LatLng) {
+    fun onSaveClicked(place: LatLng, sourceScreen: SourceScreen) {
+        when(sourceScreen){
+            SourceScreen.SAVED -> savePlace(place)
+            SourceScreen.SETTINGS -> updateMainPlace(place)
+        }
+
+    }
+
+    private fun savePlace(place: LatLng){
         _isPlaceSaved.value = ActionResult.LOADING
         viewModelScope.launch {
             repo.getWeatherDetails(
@@ -79,6 +88,11 @@ class PlacePickerViewModel(
                 _isPlaceSaved.value = ActionResult.COMPLETED
             }
         }
+    }
+
+    private fun updateMainPlace(place: LatLng){
+        repo.saveMapLocation(place)
+        _isPlaceSaved.value = ActionResult.COMPLETED
     }
 
     private fun getLanguage(): String {
