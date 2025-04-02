@@ -2,16 +2,6 @@ package com.ewida.skysense.alerts
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.FloatingActionButton
@@ -23,19 +13,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.work.WorkManager
-import com.ewida.skysense.R
 import com.ewida.skysense.alerts.components.AlertDeletionDialog
-import com.ewida.skysense.alerts.components.AlertsEmptyState
-import com.ewida.skysense.alerts.components.SingleAlertItem
-import com.ewida.skysense.common.ScreenHeader
+import com.ewida.skysense.alerts.components.AlertsFailureState
+import com.ewida.skysense.alerts.components.AlertsLoadingState
+import com.ewida.skysense.alerts.components.AlertsSuccessState
 import com.ewida.skysense.data.model.WeatherAlert
+import com.ewida.skysense.util.Result
 import java.util.UUID
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -46,9 +32,7 @@ fun AlertsScreen(
     onNavigateUp: () -> Unit
 ) {
     val context = LocalContext.current
-    val savedAlerts = viewModel.savedAlerts.collectAsStateWithLifecycle()
-    var isShowDeletionDialog by remember { mutableStateOf(false) }
-    var alertToDelete by remember { mutableStateOf(WeatherAlert()) }
+    val savedAlertsResult = viewModel.savedAlertsResult.collectAsStateWithLifecycle()
 
     Scaffold(
         floatingActionButton = {
@@ -66,32 +50,10 @@ fun AlertsScreen(
     ) {
         AlertsScreenContent(
             onBackClicked = onNavigateUp,
-            alerts = savedAlerts.value,
-            onAlarmDeleteClicked = { alert ->
-                alertToDelete = alert
-                isShowDeletionDialog = true
-            }
-        )
-
-        AnimatedVisibility(
-            visible = savedAlerts.value.isEmpty(),
-            enter = fadeIn(),
-            exit = fadeOut()
-        ) {
-            AlertsEmptyState()
-        }
-    }
-
-    AnimatedVisibility(
-        visible = isShowDeletionDialog
-    ) {
-        AlertDeletionDialog(
-            onDeleteClicked = {
-                viewModel.deleteAlert(alertToDelete)
-                WorkManager.getInstance(context).cancelWorkById(UUID.fromString(alertToDelete.id))
-            },
-            onDismiss = {
-                isShowDeletionDialog = false
+            alertsResult = savedAlertsResult.value,
+            onAlertDeleteClicked = { alert ->
+                viewModel.deleteAlert(alert)
+                WorkManager.getInstance(context).cancelWorkById(UUID.fromString(alert.id))
             }
         )
     }
@@ -99,30 +61,44 @@ fun AlertsScreen(
 
 @Composable
 private fun AlertsScreenContent(
-    alerts: List<WeatherAlert>,
+    alertsResult: Result<List<WeatherAlert>>,
     onBackClicked: () -> Unit,
-    onAlarmDeleteClicked: (WeatherAlert) -> Unit
+    onAlertDeleteClicked: (WeatherAlert) -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.background)
-            .padding(horizontal = 24.dp, vertical = 42.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        ScreenHeader(
-            title = stringResource(R.string.your_alerts),
-            onBackClicked = onBackClicked
-        )
+    when (val result = alertsResult) {
+        is Result.Loading -> {
+            AlertsLoadingState()
+        }
 
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(items = alerts) { alert ->
-                SingleAlertItem(
-                    alert = alert,
-                    onDeleteClicked = onAlarmDeleteClicked
+        is Result.Failure -> {
+            AlertsFailureState(
+                cause = result.error.message
+            )
+        }
+
+        is Result.Success<List<WeatherAlert>> -> {
+            var isShowDeletionDialog by remember { mutableStateOf(false) }
+            var alertToDelete by remember { mutableStateOf(WeatherAlert()) }
+
+            AlertsSuccessState(
+                alerts = result.data,
+                onBackClicked = onBackClicked,
+                onAlertDeleteClicked = { alert ->
+                    isShowDeletionDialog = true
+                    alertToDelete = alert
+                }
+            )
+
+            AnimatedVisibility(
+                visible = isShowDeletionDialog
+            ) {
+                AlertDeletionDialog(
+                    onDeleteClicked = {
+                        onAlertDeleteClicked(alertToDelete)
+                    },
+                    onDismiss = {
+                        isShowDeletionDialog = false
+                    }
                 )
             }
         }

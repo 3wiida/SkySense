@@ -36,11 +36,11 @@ fun ScreenHeader(
             onClick = onBackClicked
         ) {
             Icon(
-                modifier = Modifier.size(28.dp),
+                modifier = Modifier.size(24.dp),
                 painter = painterResource(
                     when(layoutDirection){
-                        LayoutDirection.Ltr ->  R.drawable.ic_back_left
-                        LayoutDirection.Rtl ->  R.drawable.ic_back_right
+                        LayoutDirection.Ltr ->  R.drawable.ic_left_arrow
+                        LayoutDirection.Rtl ->  R.drawable.ic_right_arrow
                     }
                 ),
                 contentDescription = null

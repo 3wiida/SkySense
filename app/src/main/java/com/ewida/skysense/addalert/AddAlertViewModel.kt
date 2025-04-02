@@ -16,7 +16,6 @@ class AddAlertViewModel(private val repo: WeatherRepository) : ViewModel() {
         }
     }
 
-
     @Suppress("UNCHECKED_CAST")
     class AddAlertViewModelFactory(
         private val repository: WeatherRepository

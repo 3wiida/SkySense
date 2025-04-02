@@ -2,6 +2,11 @@ package com.ewida.skysense.navigation
 
 import android.annotation.SuppressLint
 import android.content.Context
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -43,7 +48,19 @@ fun AppNavHost(
 
     NavHost(
         navController = navHostController,
-        startDestination = startDestination
+        startDestination = startDestination,
+        enterTransition = {
+            slideInHorizontally(
+                initialOffsetX = { it },
+                animationSpec = tween(500)
+            ) + fadeIn(animationSpec = tween(500))
+        },
+        exitTransition = {
+            slideOutHorizontally(
+                targetOffsetX = { -it },
+                animationSpec = tween(500)
+            ) + fadeOut(animationSpec = tween(500))
+        }
     ) {
         composable<Screens.Permissions> {
             PermissionRequestScreen(
