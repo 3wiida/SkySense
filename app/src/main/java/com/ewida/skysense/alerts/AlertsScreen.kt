@@ -2,6 +2,8 @@ package com.ewida.skysense.alerts
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,6 +19,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -25,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.work.WorkManager
 import com.ewida.skysense.R
+import com.ewida.skysense.alerts.components.AlertDeletionDialog
 import com.ewida.skysense.alerts.components.AlertsEmptyState
 import com.ewida.skysense.alerts.components.SingleAlertItem
 import com.ewida.skysense.common.ScreenHeader
@@ -40,6 +47,8 @@ fun AlertsScreen(
 ) {
     val context = LocalContext.current
     val savedAlerts = viewModel.savedAlerts.collectAsStateWithLifecycle()
+    var isShowDeletionDialog by remember { mutableStateOf(false) }
+    var alertToDelete by remember { mutableStateOf(WeatherAlert()) }
 
     Scaffold(
         floatingActionButton = {
@@ -59,16 +68,32 @@ fun AlertsScreen(
             onBackClicked = onNavigateUp,
             alerts = savedAlerts.value,
             onAlarmDeleteClicked = { alert ->
-                viewModel.deleteAlert(alert)
-                WorkManager.getInstance(context).cancelWorkById(UUID.fromString(alert.id))
+                alertToDelete = alert
+                isShowDeletionDialog = true
             }
         )
 
         AnimatedVisibility(
-            visible = savedAlerts.value.isEmpty()
+            visible = savedAlerts.value.isEmpty(),
+            enter = fadeIn(),
+            exit = fadeOut()
         ) {
             AlertsEmptyState()
         }
+    }
+
+    AnimatedVisibility(
+        visible = isShowDeletionDialog
+    ) {
+        AlertDeletionDialog(
+            onDeleteClicked = {
+                viewModel.deleteAlert(alertToDelete)
+                WorkManager.getInstance(context).cancelWorkById(UUID.fromString(alertToDelete.id))
+            },
+            onDismiss = {
+                isShowDeletionDialog = false
+            }
+        )
     }
 }
 

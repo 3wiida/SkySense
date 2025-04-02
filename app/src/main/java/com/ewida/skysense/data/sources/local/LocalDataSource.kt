@@ -14,6 +14,7 @@ interface LocalDataSource {
     suspend fun saveWeatherDetails(details: WeatherDetails)
     suspend fun getWeatherDetails(latitude: Double, longitude: Double): WeatherDetails?
     fun getSavedPlacesDetails(): Flow<List<WeatherDetails>>
+    suspend fun deleteSavedPlace(place: WeatherDetails)
 
     suspend fun saveWeatherAlert(weatherAlert: WeatherAlert)
     suspend fun deleteWeatherAlert(weatherAlert: WeatherAlert)

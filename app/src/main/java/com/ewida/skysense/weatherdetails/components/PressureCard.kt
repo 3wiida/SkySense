@@ -98,7 +98,7 @@ fun PressureCard(
                     tint = Color.Unspecified
                 )
                 Text(
-                    text = "mbar",
+                    text = stringResource(R.string.hpa),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium,
                     color = Color(0xFFA6A6A6)

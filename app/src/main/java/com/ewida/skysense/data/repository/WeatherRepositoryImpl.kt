@@ -58,10 +58,6 @@ class WeatherRepositoryImpl private constructor(
         return remoteDataSource.getWeatherDetails(latitude, longitude,lang)
     }
 
-    override fun getSavedPlacesDetails(): Flow<List<WeatherDetails>> {
-        return localDataSource.getSavedPlacesDetails()
-    }
-
     override fun fetchPlacePredictions(
         placesClient: PlacesClient,
         query: String
@@ -76,8 +72,16 @@ class WeatherRepositoryImpl private constructor(
         return remoteDataSource.fetchPlaceDetails(placesClient, placeId)
     }
 
+    override fun getSavedPlacesDetails(): Flow<List<WeatherDetails>> {
+        return localDataSource.getSavedPlacesDetails()
+    }
+
     override suspend fun saveWeatherAlert(weatherAlert: WeatherAlert) {
         localDataSource.saveWeatherAlert(weatherAlert)
+    }
+
+    override suspend fun deleteSavedPlace(place: WeatherDetails) {
+        localDataSource.deleteSavedPlace(place)
     }
 
     override suspend fun deleteWeatherAlert(weatherAlert: WeatherAlert) {

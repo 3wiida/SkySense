@@ -30,6 +30,12 @@ class SavedPlacesViewModel(private val repo: WeatherRepository) : ViewModel() {
         return repo.getAppSettings().unit
     }
 
+    fun deletePlace(place: WeatherDetails){
+        viewModelScope.launch {
+            repo.deleteSavedPlace(place)
+        }
+    }
+
     @Suppress("UNCHECKED_CAST")
     class SavedPlacesViewModelFactory(
         private val repository: WeatherRepository

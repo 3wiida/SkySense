@@ -79,4 +79,12 @@
     <string name="location">الموقع</string>
     <string name="gps">نظام تحديد المواقع (GPS)</string>
     <string name="map">الخريطة</string>
+    <string name="hpa">hPa</string>
+    <string name="delete">حذف</string>
+    <string name="delete_error">لا يمكنك حذف مكانك الرئيسى</string>
+    <string name="no_saved_locations_yet">لا توجد مواقع محفوظة حتى الآن</string>
+    <string name="empty_saved_places_description">أضف مواقعك المفضلة للتحقق من الطقس بسرعة في أي وقت.</string>
+    <string name="delete_alert">حذف التنبيه</string>
+    <string name="delete_alert_content">هل أنت متأكد أنك تريد حذف هذا التنبيه؟</string>
+
 </resources>

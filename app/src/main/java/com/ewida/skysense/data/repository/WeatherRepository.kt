@@ -27,8 +27,6 @@ interface WeatherRepository {
         lang: String
     ): WeatherDetails
 
-    fun getSavedPlacesDetails(): Flow<List<WeatherDetails>>
-
     fun fetchPlacePredictions(
         placesClient: PlacesClient,
         query: String
@@ -39,7 +37,11 @@ interface WeatherRepository {
         placeId: String,
     ): Task<FetchPlaceResponse>
 
+    fun getSavedPlacesDetails(): Flow<List<WeatherDetails>>
+
     suspend fun saveWeatherAlert(weatherAlert: WeatherAlert)
+
+    suspend fun deleteSavedPlace(place: WeatherDetails)
 
     suspend fun deleteWeatherAlert(weatherAlert: WeatherAlert)
 

@@ -30,6 +30,10 @@ class LocalDataSourceImpl(
         return dao.getSavedPlacesDetails()
     }
 
+    override suspend fun deleteSavedPlace(place: WeatherDetails) {
+        dao.deleteSavedPlace(place)
+    }
+
     override suspend fun saveWeatherAlert(weatherAlert: WeatherAlert) {
         dao.saveWeatherAlert(weatherAlert)
     }

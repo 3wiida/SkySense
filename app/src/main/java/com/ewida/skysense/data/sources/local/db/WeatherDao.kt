@@ -21,6 +21,9 @@ interface WeatherDao {
     @Query("SELECT * FROM WEATHER_DETAILS")
     fun getSavedPlacesDetails(): Flow<List<WeatherDetails>>
 
+    @Delete
+    suspend fun deleteSavedPlace(place: WeatherDetails)
+
     @Insert
     suspend fun saveWeatherAlert(weatherAlert: WeatherAlert)
 
