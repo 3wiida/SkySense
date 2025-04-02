@@ -30,7 +30,11 @@ class MainActivity : ComponentActivity() {
                 if (alertLat == 0.0 && alertLong == 0.0) {
                     Screens.WeatherDetails(null, null)
                 } else {
-                    Screens.WeatherDetails(alertLat, alertLong)
+                    Screens.WeatherDetails(
+                        placeLat = alertLat,
+                        placeLong = alertLong,
+                        isFromNotification = true
+                    )
                 }
             }else{
                 Screens.WeatherDetails(null, null)

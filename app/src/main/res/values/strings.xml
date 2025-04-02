@@ -85,4 +85,5 @@
     <string name="empty_saved_places_description">Add your favorite locations to quickly check the weather anytime.</string>
     <string name="delete_alert">Delete Alert</string>
     <string name="delete_alert_content">Are you sure you want to delete this alert</string>
+    <string name="the_weather_in_will_be">The weather in %1$s will be %2$s</string>
 </resources>

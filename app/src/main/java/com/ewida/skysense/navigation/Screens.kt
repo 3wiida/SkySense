@@ -10,7 +10,8 @@ sealed class Screens {
     @Serializable
     data class WeatherDetails(
         val placeLat: Double?,
-        val placeLong: Double?
+        val placeLong: Double?,
+        val isFromNotification: Boolean = false
     ) : Screens()
 
     @Serializable

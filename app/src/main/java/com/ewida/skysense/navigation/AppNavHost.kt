@@ -2,7 +2,6 @@ package com.ewida.skysense.navigation
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -31,7 +30,6 @@ import com.ewida.skysense.settings.SettingsViewModel
 import com.ewida.skysense.util.Constants
 import com.ewida.skysense.util.enums.SourceScreen
 import com.ewida.skysense.weatherdetails.WeatherDetailsScreen
-import com.ewida.skysense.weatherdetails.WeatherDetailsViewModel
 import com.ewida.skysense.weatherdetails.WeatherDetailsViewModel.WeatherDetailsViewModelFactory
 import com.google.android.libraries.places.api.Places
 
@@ -42,18 +40,6 @@ fun AppNavHost(
     startDestination: Screens
 ) {
     val context = LocalContext.current
-    val repository = WeatherRepositoryImpl.getInstance(
-        localDataSource = LocalDataSourceImpl(
-            dao = WeatherDatabase.getInstance(context).getDao(),
-            preferences = AppPreferencesImpl(
-                sharedPreferences = context.getSharedPreferences(
-                    Constants.SharedPreferences.SETTINGS_PREFERENCES_NAME,
-                    Context.MODE_PRIVATE
-                )
-            )
-        ),
-        remoteDataSource = RemoteDataSourceImpl(apiServices = ApiClient.getApiServices())
-    )
 
     NavHost(
         navController = navHostController,
@@ -75,10 +61,24 @@ fun AppNavHost(
             val data = navBackStackEntry.toRoute<Screens.WeatherDetails>()
             WeatherDetailsScreen(
                 viewModel = viewModel(
-                    factory = WeatherDetailsViewModelFactory(repo = repository)
+                    factory = WeatherDetailsViewModelFactory(
+                        repo = WeatherRepositoryImpl.getInstance(
+                            localDataSource = LocalDataSourceImpl(
+                                dao = WeatherDatabase.getInstance(context).getDao(),
+                                preferences = AppPreferencesImpl(
+                                    sharedPreferences = context.getSharedPreferences(
+                                        Constants.SharedPreferences.SETTINGS_PREFERENCES_NAME,
+                                        Context.MODE_PRIVATE
+                                    )
+                                )
+                            ),
+                            remoteDataSource = RemoteDataSourceImpl(apiServices = ApiClient.getApiServices())
+                        )
+                    )
                 ),
                 locationLat = data.placeLat,
                 locationLong = data.placeLong,
+                isFromNotification = data.isFromNotification,
                 onNavigateToSavedPlaces = { lat, long ->
                     navHostController.navigate(
                         Screens.SavedPlaces(
@@ -95,7 +95,7 @@ fun AppNavHost(
                         )
                     )
                 },
-                onNavigateToSettings = {lat, long ->
+                onNavigateToSettings = { lat, long ->
                     navHostController.navigate(
                         Screens.Settings(
                             currentLocationLat = lat ?: 0.0,
@@ -113,7 +113,18 @@ fun AppNavHost(
                 userLocationLongitude = data.currentLocationLong,
                 viewModel = viewModel(
                     factory = SavedPlacesViewModel.SavedPlacesViewModelFactory(
-                        repository = repository
+                        repository = WeatherRepositoryImpl.getInstance(
+                            localDataSource = LocalDataSourceImpl(
+                                dao = WeatherDatabase.getInstance(context).getDao(),
+                                preferences = AppPreferencesImpl(
+                                    sharedPreferences = context.getSharedPreferences(
+                                        Constants.SharedPreferences.SETTINGS_PREFERENCES_NAME,
+                                        Context.MODE_PRIVATE
+                                    )
+                                )
+                            ),
+                            remoteDataSource = RemoteDataSourceImpl(apiServices = ApiClient.getApiServices())
+                        )
                     )
                 ),
                 onNavigateToPlacePicker = {
@@ -151,7 +162,18 @@ fun AppNavHost(
                 source = data.source,
                 viewModel = viewModel(
                     factory = PlacePickerViewModel.PlacePickerViewModelFactory(
-                        repository = repository,
+                        repository = WeatherRepositoryImpl.getInstance(
+                            localDataSource = LocalDataSourceImpl(
+                                dao = WeatherDatabase.getInstance(context).getDao(),
+                                preferences = AppPreferencesImpl(
+                                    sharedPreferences = context.getSharedPreferences(
+                                        Constants.SharedPreferences.SETTINGS_PREFERENCES_NAME,
+                                        Context.MODE_PRIVATE
+                                    )
+                                )
+                            ),
+                            remoteDataSource = RemoteDataSourceImpl(apiServices = ApiClient.getApiServices())
+                        ),
                         placesClient = Places.createClient(context)
                     )
                 ),
@@ -163,7 +185,20 @@ fun AppNavHost(
             val data = navBackStackEntry.toRoute<Screens.Alerts>()
             AlertsScreen(
                 viewModel = viewModel(
-                    factory = AlertsViewModel.AlertsViewModelFactory(repository = repository)
+                    factory = AlertsViewModel.AlertsViewModelFactory(
+                        repository = WeatherRepositoryImpl.getInstance(
+                            localDataSource = LocalDataSourceImpl(
+                                dao = WeatherDatabase.getInstance(context).getDao(),
+                                preferences = AppPreferencesImpl(
+                                    sharedPreferences = context.getSharedPreferences(
+                                        Constants.SharedPreferences.SETTINGS_PREFERENCES_NAME,
+                                        Context.MODE_PRIVATE
+                                    )
+                                )
+                            ),
+                            remoteDataSource = RemoteDataSourceImpl(apiServices = ApiClient.getApiServices())
+                        )
+                    )
                 ),
                 onNavigateToAddAlert = {
                     navHostController.navigate(
@@ -183,7 +218,20 @@ fun AppNavHost(
             val data = navBackStackEntry.toRoute<Screens.AddAlert>()
             AddAlertScreen(
                 viewModel = viewModel(
-                    factory = AddAlertViewModel.AddAlertViewModelFactory(repository = repository)
+                    factory = AddAlertViewModel.AddAlertViewModelFactory(
+                        repository = WeatherRepositoryImpl.getInstance(
+                            localDataSource = LocalDataSourceImpl(
+                                dao = WeatherDatabase.getInstance(context).getDao(),
+                                preferences = AppPreferencesImpl(
+                                    sharedPreferences = context.getSharedPreferences(
+                                        Constants.SharedPreferences.SETTINGS_PREFERENCES_NAME,
+                                        Context.MODE_PRIVATE
+                                    )
+                                )
+                            ),
+                            remoteDataSource = RemoteDataSourceImpl(apiServices = ApiClient.getApiServices())
+                        )
+                    )
                 ),
                 currentLocationLat = data.currentLocationLat,
                 currentLocationLong = data.currentLocationLong,
@@ -197,7 +245,20 @@ fun AppNavHost(
             val data = navBackStackEntry.toRoute<Screens.Settings>()
             SettingsScreen(
                 viewModel = viewModel(
-                    factory = SettingsViewModel.SettingsViewModelFactory(repository = repository)
+                    factory = SettingsViewModel.SettingsViewModelFactory(
+                        repository = WeatherRepositoryImpl.getInstance(
+                            localDataSource = LocalDataSourceImpl(
+                                dao = WeatherDatabase.getInstance(context).getDao(),
+                                preferences = AppPreferencesImpl(
+                                    sharedPreferences = context.getSharedPreferences(
+                                        Constants.SharedPreferences.SETTINGS_PREFERENCES_NAME,
+                                        Context.MODE_PRIVATE
+                                    )
+                                )
+                            ),
+                            remoteDataSource = RemoteDataSourceImpl(apiServices = ApiClient.getApiServices())
+                        )
+                    )
                 ),
                 onNavigateToPlacePicker = {
                     navHostController.navigate(

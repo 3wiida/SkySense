@@ -37,6 +37,21 @@ class WeatherDetailsViewModel(private val repo: WeatherRepository) : ViewModel()
         }
     }
 
+    fun getRemoteWeatherDetails(latitude: Double, longitude: Double){
+        viewModelScope.launch {
+            try {
+                val details = repo.getRemoteWeatherDetails(
+                    latitude = latitude,
+                    longitude = longitude,
+                    lang = getLanguage()
+                )
+                _detailsResponse.value = Result.Success(details)
+            }catch (throwable: Throwable){
+                emitError(throwable)
+            }
+        }
+    }
+
     private suspend fun emitError(throwable: Throwable) {
         _detailsResponse.emit(
             Result.Failure(

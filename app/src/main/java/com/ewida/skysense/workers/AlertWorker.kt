@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.PixelFormat
 import android.media.MediaPlayer
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.WindowManager
@@ -66,8 +67,8 @@ class AlertWorker(
             longitude = long,
             lang = getLanguage()
         )
-
-        when (type) {
+        
+        when (type?.uppercase()) {
             AlertType.NOTIFICATION.name -> {
                 notify(cityName, weatherDetails)
             }
@@ -103,7 +104,12 @@ class AlertWorker(
         ).apply {
             setSmallIcon(R.drawable.splash_ic)
             setContentTitle(context.getString(R.string.app_name))
-            setContentText("The weather in $cityName will be ${details.current.weather.first().description}")
+            setContentText(
+                context.getString(
+                    R.string.the_weather_in_will_be,
+                    cityName,
+                    details.current.weather.first().description
+                ))
             setContentIntent(notifyPendingIntent)
         }.build()
 
@@ -168,7 +174,7 @@ class AlertWorker(
         }
     }
 
-    private fun snoozeAlert(details: WeatherDetails){
+    private fun snoozeAlert(details: WeatherDetails) {
         val snoozeRequest = OneTimeWorkRequestBuilder<AlertWorker>()
             .setInitialDelay(5, TimeUnit.MINUTES)
             .setInputData(

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SkySense</string>
+    <string name="app_name">سكاى سينس</string>
     <string name="location_permission_primary_text">احصل على تحديثات الطقس لموقعك الحالي</string>
     <string name="location_permission_secondary_text">اسمح بالوصول إلى الموقع للحصول على تحديثات الطقس بدقة. هذا مطلوب لأفضل تجربة.</string>
     <string name="notification_permission_primary_text">ابقَ على اطلاع بحالة الطقس</string>
@@ -86,5 +86,6 @@
     <string name="empty_saved_places_description">أضف مواقعك المفضلة للتحقق من الطقس بسرعة في أي وقت.</string>
     <string name="delete_alert">حذف التنبيه</string>
     <string name="delete_alert_content">هل أنت متأكد أنك تريد حذف هذا التنبيه؟</string>
+    <string name="the_weather_in_will_be">الطقس في %1$s سيكون %2$s</string>
 
 </resources>

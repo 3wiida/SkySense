@@ -46,6 +46,7 @@ fun WeatherDetailsScreen(
     viewModel: WeatherDetailsViewModel,
     locationLat: Double?,
     locationLong: Double?,
+    isFromNotification: Boolean = false,
     onNavigateToSavedPlaces: (Double?, Double?) -> Unit,
     onNavigateToAlerts: (Double?, Double?) -> Unit,
     onNavigateToSettings: (Double?, Double?) -> Unit
@@ -115,10 +116,17 @@ fun WeatherDetailsScreen(
     LaunchedEffect(Unit) {
         //When coming from saved item or notification
         locationLat?.let {
-            viewModel.getWeatherDetails(
-                latitude = locationLat.roundTo(2),
-                longitude = locationLong!!.roundTo(2)
-            )
+            if(isFromNotification){
+                viewModel.getRemoteWeatherDetails(
+                    latitude = locationLat.roundTo(2),
+                    longitude = locationLong!!.roundTo(2)
+                )
+            }else{
+                viewModel.getWeatherDetails(
+                    latitude = locationLat.roundTo(2),
+                    longitude = locationLong!!.roundTo(2)
+                )
+            }
             addressLine = LocationUtils.getLocationAddressLine(
                 context,
                 locationLat,
@@ -149,7 +157,7 @@ fun WeatherDetailsScreen(
 
             LocationType.MAP -> {
                 val (lat, long) = viewModel.getMapLocation()
-                if (locationLat == null){
+                if (locationLat == null) {
                     viewModel.getWeatherDetails(lat, long)
                     addressLine = LocationUtils.getLocationAddressLine(
                         context,

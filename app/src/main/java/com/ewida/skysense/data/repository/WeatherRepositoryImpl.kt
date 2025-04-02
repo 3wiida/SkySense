@@ -53,9 +53,10 @@ class WeatherRepositoryImpl private constructor(
     override suspend fun getRemoteWeatherDetails(
         latitude: Double,
         longitude: Double,
-        lang: String
+        lang: String,
+        unites: String
     ): WeatherDetails {
-        return remoteDataSource.getWeatherDetails(latitude, longitude,lang)
+        return remoteDataSource.getWeatherDetails(latitude, longitude, unites, lang)
     }
 
     override fun fetchPlacePredictions(

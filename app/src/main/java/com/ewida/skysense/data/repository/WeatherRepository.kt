@@ -24,7 +24,8 @@ interface WeatherRepository {
     suspend fun getRemoteWeatherDetails(
         latitude: Double,
         longitude: Double,
-        lang: String
+        lang: String,
+        unites: String = "metric",
     ): WeatherDetails
 
     fun fetchPlacePredictions(

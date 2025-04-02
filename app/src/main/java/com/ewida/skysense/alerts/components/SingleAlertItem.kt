@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import com.ewida.skysense.R
 import com.ewida.skysense.data.model.WeatherAlert
 import com.ewida.skysense.util.LocationUtils
+import com.ewida.skysense.util.enums.AlertType
 
 @Composable
 fun SingleAlertItem(
@@ -154,7 +155,11 @@ fun SingleAlertItem(
                     )
 
                     Text(
-                        text = alert.alertType,
+                        text = when(alert.alertType){
+                            AlertType.NOTIFICATION.name -> context.getString(R.string.notificationn)
+                            AlertType.POPUP.name -> context.getString(R.string.alert_popup)
+                            else -> ""
+                        },
                         style = MaterialTheme.typography.labelMedium,
                         fontSize = 12.sp,
                         color = MaterialTheme.colorScheme.onPrimary
