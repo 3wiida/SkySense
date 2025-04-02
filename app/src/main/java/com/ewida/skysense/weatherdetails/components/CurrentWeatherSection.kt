@@ -31,7 +31,6 @@ import com.ewida.skysense.data.model.Current
 import com.ewida.skysense.util.Constants
 import com.ewida.skysense.util.enums.WeatherUnit
 import com.ewida.skysense.util.formatTemperature
-import com.ewida.skysense.util.formatToDefaultLocale
 import java.time.Instant
 
 @OptIn(ExperimentalGlideComposeApi::class)
@@ -163,8 +162,8 @@ private fun getCurrentWeatherGradientColors(
     isNight: Boolean
 ): List<Color> {
     return when {
-        (stateId == 800 && !isNight) -> listOf(Color(0xFF81A1DB), Color(0xFFC7E3FF))
-        (stateId == 800) -> listOf(Color(0xFF472B97), Color(0xFF8C8ADE))
+        (stateId == 800 && isNight) -> listOf(Color(0xFF472B97), Color(0xFF8C8ADE))
+        (stateId == 800) -> listOf(Color(0xFF81A1DB), Color(0xFFC7E3FF))
         (stateId >= 500 && stateId < 600) -> listOf(Color(0xFF081225), Color(0xFF183655))
         (stateId >= 600 && stateId < 700) -> listOf(Color(0xFF8FAFE9), Color(0xFF637281))
         (stateId > 800 ) -> listOf(Color(0xFF081225), Color(0xFF183655))

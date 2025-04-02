@@ -29,7 +29,7 @@ object LocationUtils {
         }
 
         fusedLocationClient.requestLocationUpdates(
-            LocationRequest.Builder(Priority.PRIORITY_LOW_POWER, 0).build(),
+            LocationRequest.Builder(Priority.PRIORITY_BALANCED_POWER_ACCURACY, 1000).build(),
             callbacks,
             Looper.getMainLooper()
         )

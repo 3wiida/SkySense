@@ -24,6 +24,7 @@ class WeatherDetailsViewModel(private val repo: WeatherRepository) : ViewModel()
     val detailsResponse = _detailsResponse.asStateFlow()
 
     fun getWeatherDetails(latitude: Double, longitude: Double) {
+        _detailsResponse.value = Result.Loading
         viewModelScope.launch {
             repo.getWeatherDetails(
                 latitude = latitude,
@@ -38,6 +39,7 @@ class WeatherDetailsViewModel(private val repo: WeatherRepository) : ViewModel()
     }
 
     fun getRemoteWeatherDetails(latitude: Double, longitude: Double){
+        _detailsResponse.value = Result.Loading
         viewModelScope.launch {
             try {
                 val details = repo.getRemoteWeatherDetails(

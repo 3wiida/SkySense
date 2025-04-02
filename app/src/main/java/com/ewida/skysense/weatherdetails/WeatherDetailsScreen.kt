@@ -102,7 +102,6 @@ fun WeatherDetailsScreen(
     }
 
 
-
     if (isDaysForecastBottomSheetShown) {
         DailyForecastBottomSheet(
             forecast = (detailsResponse.value as Result.Success).data.daily,
