@@ -253,7 +253,8 @@ private fun WeatherDetailsUI(
         Spacer(modifier = Modifier.height(16.dp))
 
         WeatherInsightsSection(
-            insights = details.current
+            insights = details.current,
+            unit = unit
         )
     }
 }

@@ -21,12 +21,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ewida.skysense.R
+import com.ewida.skysense.util.enums.WeatherUnit
 import com.ewida.skysense.util.formatToDefaultLocale
+import com.ewida.skysense.util.formatWindSpeed
 
 @Composable
 fun WindCard(
     windSpeed: Double,
-    windDeg: Int
+    windDeg: Int,
+    unit: WeatherUnit
 ) {
     Box(
         modifier = Modifier
@@ -48,7 +51,7 @@ fun WindCard(
             )
 
             Text(
-                text = stringResource(R.string.m_s, windSpeed.formatToDefaultLocale()),
+                text = windSpeed.formatWindSpeed(unit),
                 style = MaterialTheme.typography.titleLarge,
                 fontSize = 18.sp,
                 color = MaterialTheme.colorScheme.onBackground
@@ -60,7 +63,9 @@ fun WindCard(
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                modifier = Modifier.size(72.dp).rotate(windDeg.toFloat()),
+                modifier = Modifier
+                    .size(72.dp)
+                    .rotate(windDeg.toFloat()),
                 painter = painterResource(R.drawable.ic_top_arrow),
                 contentDescription = null,
                 tint = Color.Unspecified

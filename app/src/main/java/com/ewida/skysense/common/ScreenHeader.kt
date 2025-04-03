@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -24,7 +26,6 @@ fun ScreenHeader(
     title: String,
     onBackClicked: () -> Unit
 ) {
-    val layoutDirection = LocalLayoutDirection.current
 
     Box(
         modifier = Modifier
@@ -37,12 +38,7 @@ fun ScreenHeader(
         ) {
             Icon(
                 modifier = Modifier.size(24.dp),
-                painter = painterResource(
-                    when(layoutDirection){
-                        LayoutDirection.Ltr ->  R.drawable.ic_left_arrow
-                        LayoutDirection.Rtl ->  R.drawable.ic_right_arrow
-                    }
-                ),
+               imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                 contentDescription = null
             )
         }

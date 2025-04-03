@@ -41,6 +41,24 @@ fun Int.formatTemperature(unit: WeatherUnit): String {
     return "${numberFormat.format(convertedTemp)} $translatedUnit"
 }
 
+fun Double.formatWindSpeed(unit: WeatherUnit): String {
+    val locale = Locale.getDefault()
+    val numberFormat = NumberFormat.getInstance(locale)
+
+    val convertedSpeed = when (unit) {
+        WeatherUnit.IMPERIAL -> (this * 2.23694).roundTo(2)
+        else -> this
+    }
+
+    val translatedUnit = when (unit) {
+        WeatherUnit.METRIC -> if (locale.language == "ar") "متر/ث" else "m/s"
+        WeatherUnit.STANDARD -> if (locale.language == "ar") "متر/ث" else "m/s"
+        WeatherUnit.IMPERIAL -> if (locale.language == "ar") "ميل/ساعة" else "mph"
+    }
+
+    return "${numberFormat.format(convertedSpeed)} $translatedUnit"
+}
+
 fun Context.hasLocationPermission(): Boolean {
     return ContextCompat.checkSelfPermission(
         this,

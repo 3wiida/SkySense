@@ -9,8 +9,8 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="16dp"
         app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="16dp"
         app:cardElevation="8dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,7 +33,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/poppins_bold"
-                android:text="Sky Sense"
+                android:text="@string/app_name"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toEndOf="@+id/imageView"
                 app:layout_constraintTop_toTopOf="@+id/imageView" />
@@ -57,29 +57,29 @@
                 android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView" >
+                app:layout_constraintTop_toBottomOf="@+id/imageView">
 
                 <Button
                     android:id="@+id/btnSnooze"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:text="Snooze"
-                    android:textAllCaps="false"
+                    android:layout_height="wrap_content"
                     android:layout_marginEnd="4dp"
-                    android:textColor="@color/white"
+                    android:layout_weight="1"
                     android:background="@drawable/bg_snooze_btn"
-                    android:layout_height="wrap_content"/>
+                    android:text="@string/snooze"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white" />
 
                 <Button
                     android:id="@+id/btnDismiss"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:text="Dismiss"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
+                    android:layout_weight="1"
                     android:background="@drawable/bg_dismiss_btn"
-                    android:layout_height="wrap_content"/>
+                    android:text="@string/dismiss"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white" />
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

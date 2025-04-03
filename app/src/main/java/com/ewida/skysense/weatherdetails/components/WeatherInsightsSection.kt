@@ -16,9 +16,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ewida.skysense.R
 import com.ewida.skysense.data.model.Current
+import com.ewida.skysense.util.enums.WeatherUnit
 
 @Composable
-fun WeatherInsightsSection(insights: Current) {
+fun WeatherInsightsSection(
+    insights: Current,
+    unit: WeatherUnit
+) {
     Column {
         Text(
             modifier = Modifier
@@ -53,7 +57,10 @@ fun WeatherInsightsSection(insights: Current) {
             }
 
             item {
-                FeelsLikeCard(feelsLikeTemp = insights.feels_like.toInt())
+                FeelsLikeCard(
+                    feelsLikeTemp = insights.feels_like.toInt(),
+                    unit = unit
+                )
             }
 
             item {
@@ -63,7 +70,8 @@ fun WeatherInsightsSection(insights: Current) {
             item {
                 WindCard(
                     windSpeed = insights.wind_speed,
-                    windDeg = insights.wind_deg
+                    windDeg = insights.wind_deg,
+                    unit = unit
                 )
             }
         }

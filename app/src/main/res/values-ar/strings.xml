@@ -87,5 +87,7 @@
     <string name="delete_alert">حذف التنبيه</string>
     <string name="delete_alert_content">هل أنت متأكد أنك تريد حذف هذا التنبيه؟</string>
     <string name="the_weather_in_will_be">الطقس في %1$s سيكون %2$s</string>
+    <string name="snooze">غفوه</string>
+    <string name="dismiss">إخفاء</string>
 
 </resources>

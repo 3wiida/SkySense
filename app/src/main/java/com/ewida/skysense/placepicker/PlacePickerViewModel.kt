@@ -72,7 +72,6 @@ class PlacePickerViewModel(
             SourceScreen.SAVED -> savePlace(place)
             SourceScreen.SETTINGS -> updateMainPlace(place)
         }
-
     }
 
     private fun savePlace(place: LatLng){

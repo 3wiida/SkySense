@@ -23,11 +23,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ewida.skysense.R
+import com.ewida.skysense.util.enums.WeatherUnit
+import com.ewida.skysense.util.formatTemperature
 import com.ewida.skysense.util.formatToDefaultLocale
 
 @Composable
 fun FeelsLikeCard(
-    feelsLikeTemp: Int = 7
+    feelsLikeTemp: Int = 7,
+    unit: WeatherUnit
 ) {
     Box(
         modifier = Modifier
@@ -49,7 +52,7 @@ fun FeelsLikeCard(
             )
 
             Text(
-                text = feelsLikeTemp.formatToDefaultLocale(),
+                text = feelsLikeTemp.formatTemperature(unit),
                 style = MaterialTheme.typography.titleLarge,
                 fontSize = 18.sp,
                 color = MaterialTheme.colorScheme.onBackground
