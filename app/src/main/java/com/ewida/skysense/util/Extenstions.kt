@@ -22,8 +22,6 @@ fun Number.formatToDefaultLocale(): String {
     return numberFormat.format(this)
 }
 
-
-
 fun Int.formatTemperature(unit: WeatherUnit): String {
     val locale = Locale.getDefault()
     val numberFormat = NumberFormat.getInstance(locale)

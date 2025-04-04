@@ -113,7 +113,6 @@ fun WeatherDetailsScreen(
     }
 
     LaunchedEffect(Unit) {
-        //When coming from saved item or notification
         locationLat?.let {
             if(isFromNotification){
                 viewModel.getRemoteWeatherDetails(

@@ -90,5 +90,6 @@
     <string name="snooze">غفوه</string>
     <string name="dismiss">إخفاء</string>
     <string name="alert_deleted_successfully">تم حذف التنبيه بنجاح</string>
+    <string name="no_internet_connection_available">لا يوجد اتصال بالانترنت</string>
 
 </resources>
