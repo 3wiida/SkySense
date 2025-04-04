@@ -22,6 +22,8 @@ fun Number.formatToDefaultLocale(): String {
     return numberFormat.format(this)
 }
 
+
+
 fun Int.formatTemperature(unit: WeatherUnit): String {
     val locale = Locale.getDefault()
     val numberFormat = NumberFormat.getInstance(locale)
@@ -31,6 +33,7 @@ fun Int.formatTemperature(unit: WeatherUnit): String {
         WeatherUnit.STANDARD -> (this + 273.15).roundToInt()
         WeatherUnit.IMPERIAL -> (this * 9 / 5 + 32.0).roundToInt()
     }
+
 
     val translatedUnit = when (unit) {
         WeatherUnit.METRIC -> if (locale.language == "ar") "°س" else "°C"
