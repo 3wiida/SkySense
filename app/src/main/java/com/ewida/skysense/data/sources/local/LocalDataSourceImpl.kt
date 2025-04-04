@@ -38,8 +38,8 @@ class LocalDataSourceImpl(
         dao.saveWeatherAlert(weatherAlert)
     }
 
-    override suspend fun deleteWeatherAlert(weatherAlert: WeatherAlert) {
-        dao.deleteWeatherAlert(weatherAlert)
+    override suspend fun deleteWeatherAlert(weatherAlert: WeatherAlert) : Int {
+        return dao.deleteWeatherAlert(weatherAlert)
     }
 
     override suspend fun deleteAlertByID(alertID: String) {

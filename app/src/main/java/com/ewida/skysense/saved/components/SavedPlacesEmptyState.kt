@@ -21,7 +21,10 @@ import com.ewida.skysense.R
 @Composable
 fun SavedPlacesEmptyState() {
     Column(
-        modifier = Modifier.fillMaxSize().padding(top = 42.dp),
+        modifier = Modifier
+            .padding(horizontal = 24.dp)
+            .fillMaxSize()
+            .padding(top = 42.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

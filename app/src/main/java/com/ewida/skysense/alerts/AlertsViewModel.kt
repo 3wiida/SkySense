@@ -10,11 +10,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import com.ewida.skysense.util.Result
+import kotlinx.coroutines.Dispatchers
 
 class AlertsViewModel(private val repo: WeatherRepository) : ViewModel() {
 
     private val _savedAlertsResult = MutableStateFlow<Result<List<WeatherAlert>>>(Result.Loading)
     val savedAlertsResult = _savedAlertsResult.asStateFlow()
+
+    private val _isDeletedSuccessfully = MutableStateFlow(false)
+    val isDeletedSuccessfully = _isDeletedSuccessfully.asStateFlow()
 
     init {
         getSavedAlerts()
@@ -40,7 +44,9 @@ class AlertsViewModel(private val repo: WeatherRepository) : ViewModel() {
 
     fun deleteAlert(alert: WeatherAlert) {
         viewModelScope.launch {
-            repo.deleteWeatherAlert(alert)
+            _isDeletedSuccessfully.emit(false)
+            val result = repo.deleteWeatherAlert(alert)
+            _isDeletedSuccessfully.emit(result >= 1)
         }
     }
 

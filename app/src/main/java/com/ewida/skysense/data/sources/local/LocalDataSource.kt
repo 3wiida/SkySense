@@ -17,7 +17,7 @@ interface LocalDataSource {
     suspend fun deleteSavedPlace(place: WeatherDetails)
 
     suspend fun saveWeatherAlert(weatherAlert: WeatherAlert)
-    suspend fun deleteWeatherAlert(weatherAlert: WeatherAlert)
+    suspend fun deleteWeatherAlert(weatherAlert: WeatherAlert): Int
     suspend fun deleteAlertByID(alertID: String)
     fun getAllWeatherAlerts(): Flow<List<WeatherAlert>>
 

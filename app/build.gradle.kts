@@ -101,4 +101,10 @@ dependencies {
 
     //Constraint Layout
     implementation(libs.androidx.constraintlayout)
+
+    //MockK
+    testImplementation ("io.mockk:mockk-android:1.13.17")
+    testImplementation ("io.mockk:mockk-agent:1.13.17")
+    testImplementation ("androidx.arch.core:core-testing:2.2.0")
+    implementation ("org.jetbrains.kotlin:kotlin-test:2.0.0")
 }

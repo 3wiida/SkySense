@@ -41,8 +41,9 @@ class FakeLocalDataSource(
         weatherAlerts.add(weatherAlert)
     }
 
-    override suspend fun deleteWeatherAlert(weatherAlert: WeatherAlert) {
+    override suspend fun deleteWeatherAlert(weatherAlert: WeatherAlert): Int {
         weatherAlerts.remove(weatherAlert)
+        return 1
     }
 
     override suspend fun deleteAlertByID(alertID: String) {

@@ -80,7 +80,7 @@ fun PlacesSearchBar(
         ) {
             predictions.forEach { prediction ->
                 DropdownMenuItem(
-                    text = { Text(prediction.getPrimaryText(null).toString()) },
+                    text = { Text(prediction.getFullText(null).toString()) },
                     onClick = {
                         onPlaceSelected(prediction.placeId)
                         isDropdownExpanded = false

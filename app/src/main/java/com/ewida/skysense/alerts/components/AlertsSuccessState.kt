@@ -43,8 +43,12 @@ fun AlertsSuccessState(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(items = alerts) { alert ->
+            items(
+                items = alerts,
+                key = { it.id }
+            ) { alert ->
                 SingleAlertItem(
+                    modifier = Modifier.animateItem(),
                     alert = alert,
                     onDeleteClicked = onAlertDeleteClicked
                 )

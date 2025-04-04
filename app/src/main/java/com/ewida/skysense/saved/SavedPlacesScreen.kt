@@ -152,9 +152,11 @@ private fun SavedPlacesScreenContent(
                     }
                 } else {
                     items(
-                        items = savedPlaces
+                        items = savedPlaces,
+                        key = { it.lat }
                     ) { placeDetails ->
                         SavedPlaceItem(
+                            modifier = Modifier.animateItem(),
                             placeDetails = placeDetails,
                             unit = unit,
                             onPlaceClicked = onPlaceClicked,

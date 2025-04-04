@@ -88,4 +88,5 @@
     <string name="the_weather_in_will_be">The weather in %1$s will be %2$s</string>
     <string name="snooze">Snooze</string>
     <string name="dismiss">Dismiss</string>
+    <string name="alert_deleted_successfully">Alert Deleted Successfully</string>
 </resources>

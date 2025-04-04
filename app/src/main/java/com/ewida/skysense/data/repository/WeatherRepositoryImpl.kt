@@ -85,8 +85,8 @@ class WeatherRepositoryImpl private constructor(
         localDataSource.deleteSavedPlace(place)
     }
 
-    override suspend fun deleteWeatherAlert(weatherAlert: WeatherAlert) {
-        localDataSource.deleteWeatherAlert(weatherAlert)
+    override suspend fun deleteWeatherAlert(weatherAlert: WeatherAlert): Int {
+        return localDataSource.deleteWeatherAlert(weatherAlert)
     }
 
     override suspend fun deleteAlertByID(alertID: String) {

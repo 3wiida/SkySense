@@ -42,6 +42,7 @@ import com.ewida.skysense.util.enums.AlertType
 
 @Composable
 fun SingleAlertItem(
+    modifier: Modifier = Modifier,
     alert: WeatherAlert,
     onDeleteClicked: (WeatherAlert) -> Unit
 ) {
@@ -57,7 +58,7 @@ fun SingleAlertItem(
     }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(110.dp)
             .background(

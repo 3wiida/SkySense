@@ -1,6 +1,7 @@
 package com.ewida.skysense.alerts
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
@@ -9,6 +10,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -16,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.work.WorkManager
+import com.ewida.skysense.R
 import com.ewida.skysense.alerts.components.AlertDeletionDialog
 import com.ewida.skysense.alerts.components.AlertsFailureState
 import com.ewida.skysense.alerts.components.AlertsLoadingState
@@ -33,6 +36,7 @@ fun AlertsScreen(
 ) {
     val context = LocalContext.current
     val savedAlertsResult = viewModel.savedAlertsResult.collectAsStateWithLifecycle()
+    val alertDeletionState = viewModel.isDeletedSuccessfully.collectAsStateWithLifecycle()
 
     Scaffold(
         floatingActionButton = {
@@ -56,6 +60,12 @@ fun AlertsScreen(
                 WorkManager.getInstance(context).cancelWorkById(UUID.fromString(alert.id))
             }
         )
+    }
+
+    LaunchedEffect(key1 = alertDeletionState.value) {
+        if (alertDeletionState.value) {
+            Toast.makeText(context, R.string.alert_deleted_successfully, Toast.LENGTH_SHORT).show()
+        }
     }
 }
 

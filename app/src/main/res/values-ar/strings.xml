@@ -89,5 +89,6 @@
     <string name="the_weather_in_will_be">الطقس في %1$s سيكون %2$s</string>
     <string name="snooze">غفوه</string>
     <string name="dismiss">إخفاء</string>
+    <string name="alert_deleted_successfully">تم حذف التنبيه بنجاح</string>
 
 </resources>

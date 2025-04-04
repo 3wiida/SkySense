@@ -28,7 +28,7 @@ interface WeatherDao {
     suspend fun saveWeatherAlert(weatherAlert: WeatherAlert)
 
     @Delete
-    suspend fun deleteWeatherAlert(weatherAlert: WeatherAlert)
+    suspend fun deleteWeatherAlert(weatherAlert: WeatherAlert): Int
 
     @Query("DELETE FROM WeatherAlert WHERE id = :alertID")
     suspend fun deleteAlertByID(alertID: String)

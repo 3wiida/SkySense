@@ -42,6 +42,7 @@ import com.ewida.skysense.util.LocationUtils
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SavedPlaceItem(
+    modifier: Modifier = Modifier,
     placeDetails: WeatherDetails,
     unit: WeatherUnit,
     onPlaceClicked: (WeatherDetails) -> Unit,
@@ -59,7 +60,9 @@ fun SavedPlaceItem(
         )?.subAdminArea ?: context.getString(R.string.unknown_location)
 
     }
-    Column {
+    Column(
+        modifier = modifier
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
