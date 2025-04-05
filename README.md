@@ -19,7 +19,9 @@ Available on MediaFire Store
    <img src="assets/home_one.jpg" width="150" alt="Screenshot 2">
    <img src="assets/home_three.jpg" width="150" alt="Screenshot 3">
    <img src="assets/home_four.jpg" width="150" alt="Screenshot 4">
+  <img src="assets/map.jpg" width="150" alt="Screenshot 8">
   <img src="assets/saved.jpg" width="150" alt="Screenshot 5">
+  <img src="assets/add_alert.jpg" width="150" alt="Screenshot 9">
   <img src="assets/alerts.jpg" width="150" alt="Screenshot 6">
   <img src="assets/settings.jpg" width="150" alt="Screenshot 7">
 </div>
