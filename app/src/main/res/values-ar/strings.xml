@@ -79,7 +79,7 @@
     <string name="location">الموقع</string>
     <string name="gps">نظام تحديد المواقع (GPS)</string>
     <string name="map">الخريطة</string>
-    <string name="hpa">hPa</string>
+    <string name="hpa">ضج</string>
     <string name="delete">حذف</string>
     <string name="delete_error">لا يمكنك حذف مكانك الرئيسى</string>
     <string name="no_saved_locations_yet">لا توجد مواقع محفوظة حتى الآن</string>
