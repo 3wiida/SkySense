@@ -23,13 +23,12 @@ class WeatherDetailsViewModel(private val repo: WeatherRepository) : ViewModel()
     private val _detailsResponse = MutableStateFlow<Result<WeatherDetails>>(Result.Loading)
     val detailsResponse = _detailsResponse.asStateFlow()
 
-    fun getWeatherDetails(latitude: Double, longitude: Double) {
-        _detailsResponse.value = Result.Loading
+    fun getWeatherDetails(latitude: Double, longitude: Double, deviceLanguageCode: String) {
         viewModelScope.launch {
             repo.getWeatherDetails(
                 latitude = latitude,
                 longitude = longitude,
-                lang = getLanguage()
+                lang = getLanguage(deviceLanguageCode)
             ).catch { throwable ->
                 emitError(throwable)
             }.collect { details ->
@@ -38,17 +37,16 @@ class WeatherDetailsViewModel(private val repo: WeatherRepository) : ViewModel()
         }
     }
 
-    fun getRemoteWeatherDetails(latitude: Double, longitude: Double){
-        _detailsResponse.value = Result.Loading
+    fun getRemoteWeatherDetails(latitude: Double, longitude: Double, deviceLanguageCode: String) {
         viewModelScope.launch {
             try {
                 val details = repo.getRemoteWeatherDetails(
                     latitude = latitude,
                     longitude = longitude,
-                    lang = getLanguage()
+                    lang = getLanguage(deviceLanguageCode)
                 )
                 _detailsResponse.value = Result.Success(details)
-            }catch (throwable: Throwable){
+            } catch (throwable: Throwable) {
                 emitError(throwable)
             }
         }
@@ -66,10 +64,17 @@ class WeatherDetailsViewModel(private val repo: WeatherRepository) : ViewModel()
         )
     }
 
-    private fun getLanguage(): String {
+    private fun getLanguage(deviceLanguageCode: String): String {
         return when (repo.getAppSettings().language) {
             AppLanguage.ENGLISH -> "en"
             AppLanguage.ARABIC -> "ar"
+            AppLanguage.SAME_AS_DEVICE -> {
+                if (deviceLanguageCode !in listOf("ar", "en")) {
+                    "en"
+                } else {
+                    deviceLanguageCode
+                }
+            }
         }
     }
 

@@ -90,4 +90,5 @@
     <string name="dismiss">Dismiss</string>
     <string name="alert_deleted_successfully">Alert Deleted Successfully</string>
     <string name="no_internet_connection_available">No Internet Connection Available</string>
+    <string name="same_as_device">Device</string>
 </resources>

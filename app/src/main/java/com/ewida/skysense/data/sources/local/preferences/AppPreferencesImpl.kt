@@ -21,12 +21,13 @@ class AppPreferencesImpl(private val sharedPreferences: SharedPreferences) : App
     private fun getLanguage(): AppLanguage {
         val language = sharedPreferences.getString(
             Constants.SharedPreferences.LANGUAGE_PREFERENCES_KEY,
-            "ENGLISH"
+            AppLanguage.SAME_AS_DEVICE.name
         )
 
         return when (language) {
             "ARABIC" -> AppLanguage.ARABIC
-            else -> AppLanguage.ENGLISH
+            "ENGLISH" -> AppLanguage.ENGLISH
+            else -> AppLanguage.SAME_AS_DEVICE
         }
     }
 

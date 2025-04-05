@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -92,6 +93,9 @@ fun FeelsLikeCard(
             }
 
             Icon(
+                modifier = Modifier.rotate(
+                    degrees = 150f
+                ),
                 painter = painterResource(R.drawable.ic_arrow),
                 contentDescription = null,
                 tint = Color.Unspecified
@@ -101,3 +105,4 @@ fun FeelsLikeCard(
     }
 
 }
+

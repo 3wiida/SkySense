@@ -38,7 +38,7 @@ fun SavedPlacesScreen(
     viewModel: SavedPlacesViewModel,
     userLocationLatitude: Double,
     userLocationLongitude: Double,
-    onNavigateToPlaceDetails: (Double, Double) -> Unit,
+    onNavigateToPlaceDetails: (Double?, Double?) -> Unit,
     onNavigateToPlacePicker: () -> Unit,
     onNavigateUp: () -> Unit
 ) {
@@ -63,8 +63,8 @@ fun SavedPlacesScreen(
             unit = viewModel.getUnit(),
             userLocationLatitude = userLocationLatitude,
             userLocationLongitude = userLocationLongitude,
-            onPlaceClicked = { details ->
-                onNavigateToPlaceDetails(details.lat, details.lon)
+            onPlaceClicked = { lat, long ->
+                onNavigateToPlaceDetails(lat, long)
             },
             onDeleteItemClicked = { place ->
                 viewModel.deletePlace(place)
@@ -80,7 +80,7 @@ private fun SavedPlacesScreenContent(
     unit: WeatherUnit,
     userLocationLatitude: Double,
     userLocationLongitude: Double,
-    onPlaceClicked: (WeatherDetails) -> Unit,
+    onPlaceClicked: (Double?, Double?) -> Unit,
     onDeleteItemClicked: (WeatherDetails) -> Unit,
     onBackClicked: () -> Unit
 ) {
@@ -121,7 +121,9 @@ private fun SavedPlacesScreenContent(
                         SavedPlaceItem(
                             placeDetails = it,
                             unit = unit,
-                            onPlaceClicked = onPlaceClicked,
+                            onPlaceClicked = {
+                                onPlaceClicked(null, null)
+                            },
                             onDeletePlace = {
                                 Toast.makeText(
                                     context,
@@ -159,7 +161,9 @@ private fun SavedPlacesScreenContent(
                             modifier = Modifier.animateItem(),
                             placeDetails = placeDetails,
                             unit = unit,
-                            onPlaceClicked = onPlaceClicked,
+                            onPlaceClicked = {
+                                onPlaceClicked(it.lat, it.lon)
+                            },
                             onDeletePlace = onDeleteItemClicked
                         )
                     }

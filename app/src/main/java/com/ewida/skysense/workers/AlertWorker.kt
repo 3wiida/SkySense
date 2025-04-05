@@ -60,14 +60,18 @@ class AlertWorker(
         val long = inputData.getDouble(ALERT_LONG_KEY, 0.0)
         val type = inputData.getString(ALERT_TYPE_KEY)
 
-        val cityName = LocationUtils.getLocationAddressLine(context, lat, long)?.subAdminArea
-            ?: "Unknown Location"
+        val cityName = LocationUtils.getLocationAddressLine(
+            context,
+            lat,
+            long
+        )?.subAdminArea ?: context.getString(R.string.unknown_location)
+
         val weatherDetails = repo.getRemoteWeatherDetails(
             latitude = lat,
             longitude = long,
             lang = getLanguage()
         )
-        
+
         when (type?.uppercase()) {
             AlertType.NOTIFICATION.name -> {
                 notify(cityName, weatherDetails)
@@ -109,7 +113,8 @@ class AlertWorker(
                     R.string.the_weather_in_will_be,
                     cityName,
                     details.current.weather.first().description
-                ))
+                )
+            )
             setContentIntent(notifyPendingIntent)
         }.build()
 
@@ -205,6 +210,7 @@ class AlertWorker(
         return when (repo.getAppSettings().language) {
             AppLanguage.ENGLISH -> "en"
             AppLanguage.ARABIC -> "ar"
+            AppLanguage.SAME_AS_DEVICE -> context.resources.configuration.locales[0].language
         }
     }
 

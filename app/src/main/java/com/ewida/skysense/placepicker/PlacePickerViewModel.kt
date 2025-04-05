@@ -67,20 +67,20 @@ class PlacePickerViewModel(
         }
     }
 
-    fun onSaveClicked(place: LatLng, sourceScreen: SourceScreen) {
-        when(sourceScreen){
-            SourceScreen.SAVED -> savePlace(place)
+    fun onSaveClicked(place: LatLng, sourceScreen: SourceScreen, deviceLanguageCode: String) {
+        when (sourceScreen) {
+            SourceScreen.SAVED -> savePlace(place, deviceLanguageCode)
             SourceScreen.SETTINGS -> updateMainPlace(place)
         }
     }
 
-    private fun savePlace(place: LatLng){
+    private fun savePlace(place: LatLng, deviceLanguageCode: String) {
         _isPlaceSaved.value = ActionResult.LOADING
         viewModelScope.launch {
             repo.getWeatherDetails(
                 latitude = place.latitude.roundTo(2),
                 longitude = place.longitude.roundTo(2),
-                lang = getLanguage()
+                lang = getLanguage(deviceLanguageCode)
             ).catch { throwable ->
                 _isPlaceSaved.value = ActionResult.FAILED
             }.collect { _ ->
@@ -89,15 +89,22 @@ class PlacePickerViewModel(
         }
     }
 
-    private fun updateMainPlace(place: LatLng){
+    private fun updateMainPlace(place: LatLng) {
         repo.saveMapLocation(place)
         _isPlaceSaved.value = ActionResult.COMPLETED
     }
 
-    private fun getLanguage(): String {
+    private fun getLanguage(deviceLanguageCode: String): String {
         return when (repo.getAppSettings().language) {
             AppLanguage.ENGLISH -> "en"
             AppLanguage.ARABIC -> "ar"
+            AppLanguage.SAME_AS_DEVICE -> {
+                if (deviceLanguageCode !in listOf("ar", "en")) {
+                    "en"
+                } else {
+                    deviceLanguageCode
+                }
+            }
         }
     }
 

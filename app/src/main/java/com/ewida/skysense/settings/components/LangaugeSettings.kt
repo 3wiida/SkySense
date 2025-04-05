@@ -1,5 +1,6 @@
 package com.ewida.skysense.settings.components
 
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,10 +13,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -24,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.ewida.skysense.R
+import com.ewida.skysense.util.LanguageUtils
 import com.ewida.skysense.util.enums.AppLanguage
 
 @Composable
@@ -31,6 +31,7 @@ fun LanguageSettings(
     language: AppLanguage,
     onLanguageChanged: (AppLanguage) -> Unit
 ) {
+    val activity = LocalActivity.current
     var selectedLanguage by rememberSaveable { mutableStateOf(language) }
 
     Column(
@@ -62,9 +63,17 @@ fun LanguageSettings(
                 RadioButton(
                     selected = selectedLanguage == AppLanguage.ENGLISH,
                     onClick = {
-                        if(selectedLanguage != AppLanguage.ENGLISH){
-                            selectedLanguage = AppLanguage.ENGLISH
-                            onLanguageChanged(AppLanguage.ENGLISH)
+                        if (selectedLanguage != AppLanguage.ENGLISH) {
+                            when {
+                                (LanguageUtils.getDeviceLanguageCode(activity) == "en" && selectedLanguage == AppLanguage.SAME_AS_DEVICE) -> {
+                                    selectedLanguage = AppLanguage.ENGLISH
+                                }
+
+                                else -> {
+                                    selectedLanguage = AppLanguage.ENGLISH
+                                    onLanguageChanged(AppLanguage.ENGLISH)
+                                }
+                            }
                         }
                     }
                 )
@@ -77,13 +86,47 @@ fun LanguageSettings(
                 RadioButton(
                     selected = selectedLanguage == AppLanguage.ARABIC,
                     onClick = {
-                        if(selectedLanguage != AppLanguage.ARABIC){
-                            selectedLanguage = AppLanguage.ARABIC
-                            onLanguageChanged(AppLanguage.ARABIC)
+                        if (selectedLanguage != AppLanguage.ARABIC) {
+                            when {
+                                (LanguageUtils.getDeviceLanguageCode(activity) == "ar" && selectedLanguage == AppLanguage.SAME_AS_DEVICE) -> {
+                                    selectedLanguage = AppLanguage.ARABIC
+                                }
+
+                                else -> {
+                                    selectedLanguage = AppLanguage.ARABIC
+                                    onLanguageChanged(AppLanguage.ARABIC)
+                                }
+                            }
                         }
                     }
                 )
                 Text(text = stringResource(R.string.arabic))
+            }
+
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                RadioButton(
+                    selected = selectedLanguage == AppLanguage.SAME_AS_DEVICE,
+                    onClick = {
+                        if (selectedLanguage != AppLanguage.SAME_AS_DEVICE) {
+                            when {
+                                (LanguageUtils.getDeviceLanguageCode(activity) == "en" && selectedLanguage == AppLanguage.ENGLISH) || (LanguageUtils.getDeviceLanguageCode(
+                                    activity
+                                ) == "ar" && selectedLanguage == AppLanguage.ARABIC) -> {
+                                    selectedLanguage = AppLanguage.SAME_AS_DEVICE
+                                }
+
+                                else -> {
+                                    selectedLanguage = AppLanguage.SAME_AS_DEVICE
+                                    onLanguageChanged(AppLanguage.SAME_AS_DEVICE)
+                                }
+                            }
+                        }
+                    }
+                )
+                Text(text = stringResource(R.string.same_as_device))
             }
         }
     }

@@ -2,6 +2,7 @@ package com.ewida.skysense.weatherdetails
 
 import android.annotation.SuppressLint
 import android.location.Location
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ewida.skysense.R
 import com.ewida.skysense.data.model.WeatherDetails
+import com.ewida.skysense.util.LanguageUtils
 import com.ewida.skysense.util.LocationUtils
 import com.ewida.skysense.util.Result
 import com.ewida.skysense.util.enums.LocationType
@@ -58,6 +60,7 @@ fun WeatherDetailsScreen(
     var addressLine by remember { mutableStateOf("") }
 
     val context = LocalContext.current
+    val activity = LocalActivity.current
 
     Scaffold(
         topBar = {
@@ -94,7 +97,8 @@ fun WeatherDetailsScreen(
                 currentLocation?.let {
                     viewModel.getWeatherDetails(
                         latitude = it.latitude.roundTo(2),
-                        longitude = it.longitude.roundTo(2)
+                        longitude = it.longitude.roundTo(2),
+                        deviceLanguageCode = LanguageUtils.getDeviceLanguageCode(activity)
                     )
                 }
             }
@@ -114,15 +118,17 @@ fun WeatherDetailsScreen(
 
     LaunchedEffect(Unit) {
         locationLat?.let {
-            if(isFromNotification){
+            if (isFromNotification) {
                 viewModel.getRemoteWeatherDetails(
                     latitude = locationLat.roundTo(2),
-                    longitude = locationLong!!.roundTo(2)
+                    longitude = locationLong!!.roundTo(2),
+                    deviceLanguageCode = LanguageUtils.getDeviceLanguageCode(activity)
                 )
-            }else{
+            } else {
                 viewModel.getWeatherDetails(
                     latitude = locationLat.roundTo(2),
-                    longitude = locationLong!!.roundTo(2)
+                    longitude = locationLong!!.roundTo(2),
+                    deviceLanguageCode = LanguageUtils.getDeviceLanguageCode(activity)
                 )
             }
             addressLine = LocationUtils.getLocationAddressLine(
@@ -140,7 +146,8 @@ fun WeatherDetailsScreen(
                         if (locationLat == null) {
                             viewModel.getWeatherDetails(
                                 latitude = location.latitude.roundTo(2),
-                                longitude = location.longitude.roundTo(2)
+                                longitude = location.longitude.roundTo(2),
+                                deviceLanguageCode = LanguageUtils.getDeviceLanguageCode(activity)
                             )
                             addressLine = LocationUtils.getLocationAddressLine(
                                 context,
@@ -156,16 +163,20 @@ fun WeatherDetailsScreen(
             LocationType.MAP -> {
                 val (lat, long) = viewModel.getMapLocation()
                 if (locationLat == null) {
-                    viewModel.getWeatherDetails(lat, long)
+                    viewModel.getWeatherDetails(
+                        latitude = lat,
+                        longitude = long,
+                        deviceLanguageCode = LanguageUtils.getDeviceLanguageCode(activity)
+                    )
                     addressLine = LocationUtils.getLocationAddressLine(
                         context,
                         lat,
                         long
                     )?.subAdminArea ?: context.getString(R.string.unknown_location)
-                    currentLocation = Location("").apply {
-                        latitude = lat
-                        longitude = long
-                    }
+                }
+                currentLocation = Location("").apply {
+                    latitude = lat
+                    longitude = long
                 }
             }
         }

@@ -2,6 +2,7 @@ package com.ewida.skysense.navigation
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -154,6 +155,7 @@ fun AppNavHost(
                     )
                 },
                 onNavigateToPlaceDetails = { placeLat, placeLong ->
+                    Log.d("````TAG````", "AppNavHost: $placeLat //// $placeLong")
                     navHostController.navigate(
                         Screens.WeatherDetails(
                             placeLat = placeLat,

@@ -41,4 +41,5 @@ class SkySenseApplication : Application() {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(alertsChannel)
     }
+
 }
